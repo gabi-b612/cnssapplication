@@ -5,6 +5,7 @@
     'submitClass' => 'bg-my-green',
     'formId' => 'modal-form',
     'openOnLoad' => false,
+    'maxWidth' => 'max-w-md',
 ])
 
 <div
@@ -39,7 +40,7 @@
 
         <div class="flex min-h-full items-center justify-center p-4">
             <div
-                class="relative bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+                class="relative bg-white rounded-xl shadow-2xl {{ $maxWidth }} w-full max-h-[90vh] overflow-y-auto"
                 @click.stop
                 x-transition:enter="ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95"

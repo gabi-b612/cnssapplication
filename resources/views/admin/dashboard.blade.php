@@ -34,6 +34,22 @@
         </div>
     </div>
 
+    <!-- Card APF -->
+    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-indigo-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-600 text-sm font-medium">Agents APF</p>
+                <p class="text-3xl font-bold text-black-blue mt-2">{{ $stats['apfs'] ?? 0 }}</p>
+            </div>
+            <div class="bg-indigo-500/10 p-4 rounded-lg">
+                <i class="fas fa-user-shield text-indigo-500 text-2xl"></i>
+            </div>
+        </div>
+        <a href="{{ route('admin.apfs.index') }}" class="text-my-green text-sm font-medium mt-4 inline-block hover:underline">
+            Gérer →
+        </a>
+    </div>
+
     <!-- Card Liquidations -->
     <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
         <div class="flex items-center justify-between">
