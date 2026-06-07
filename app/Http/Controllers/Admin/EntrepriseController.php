@@ -15,9 +15,32 @@ class EntrepriseController extends Controller
         return view('admin.entreprises', compact('entreprises'));
     }
 
-    public function show(Entreprise $entreprise)
+    public function edit(Entreprise $entreprise)
     {
-        return view('admin.entreprises.show', compact('entreprise'));
+        return view('admin.entreprises.edit', compact('entreprise'));
+    }
+
+    public function update(StoreEntrepriseRequest $request, Entreprise $entreprise)
+    {
+        try {
+            $data = $request->validated();
+            
+            // Ne hasher le password que s'il est fourni
+            if (!empty($data['password'])) {
+                $data['password'] = Hash::make($data['password']);
+            } else {
+                unset($data['password']);
+            }
+
+            $entreprise->update($data);
+
+            return redirect()->route('admin.entreprises.index')
+                ->with('success', 'Entreprise mise à jour avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erreur lors de la mise à jour de l\'entreprise.')
+                ->withInput();
+        }
     }
 
     public function store(StoreEntrepriseRequest $request)

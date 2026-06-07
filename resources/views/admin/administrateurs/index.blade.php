@@ -1,36 +1,33 @@
 @extends('layouts.admin')
 
-@section('title', 'Entreprises - Administration CNSS')
-@section('page-title', 'Gestion des Entreprises')
+@section('title', 'Administrateurs - Administration CNSS')
+@section('page-title', 'Gestion des Administrateurs')
 
 @section('content')
 <div class="mb-6 flex items-center justify-between">
-    <p class="text-gray-600">Gérez l'ensemble des entreprises enregistrées dans le système.</p>
-    <button @click="$refs.modalEntreprise.open = true" class="px-4 py-2 bg-my-green text-white rounded-lg hover:opacity-90 transition-opacity font-medium flex items-center gap-2">
-        <i class="fas fa-plus"></i>Ajouter une entreprise
+    <p class="text-gray-600">Gérez l'ensemble des administrateurs du système CNSS.</p>
+    <button @click="$refs.modalAdmin.open = true" class="px-4 py-2 bg-my-green text-white rounded-lg hover:opacity-90 transition-opacity font-medium flex items-center gap-2">
+        <i class="fas fa-plus"></i>Ajouter un administrateur
     </button>
 </div>
 
-<!-- Tableau des Entreprises -->
+<!-- Tableau des Administrateurs -->
 <div class="bg-white rounded-lg shadow overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-200">
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                        Raison Sociale
+                        Nom Complet
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                         Email
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                        Téléphone
+                        Fonction
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                        Forme Juridique
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                        Date
+                        Date Création
                     </th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
                         Actions
@@ -38,34 +35,32 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-                @forelse($entreprises as $entreprise)
+                @forelse($administrateurs as $admin)
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-black-blue">{{ $entreprise->raison_sociale }}</div>
-                            <div class="text-xs text-gray-500">{{ $entreprise->siege_social }}</div>
+                            <div class="text-sm font-medium text-black-blue">{{ $admin->nom }} {{ $admin->prenom }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {{ $entreprise->email }}
+                            {{ $admin->email }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {{ $entreprise->telephone ?? 'N/A' }}
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                {{ $admin->fonction }}
+                            </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {{ $entreprise->forme_juridique }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {{ $entreprise->created_at->format('d/m/Y') }}
+                            {{ $admin->created_at->format('d/m/Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{ route('admin.entreprises.show', $entreprise) }}" class="text-blue-600 hover:text-blue-900 transition-colors mr-3" title="Voir les détails">
+                            <a href="{{ route('admin.administrateurs.show', $admin) }}" class="text-blue-600 hover:text-blue-900 transition-colors mr-3" title="Voir les détails">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="{{ route('admin.entreprises.edit', $entreprise) }}" class="text-blue-600 hover:text-blue-900 transition-colors mr-3" title="Éditer">
+                            <a href="{{ route('admin.administrateurs.edit', $admin) }}" class="text-blue-600 hover:text-blue-900 transition-colors mr-3" title="Éditer">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form method="POST" action="{{ route('admin.entreprises.destroy', $entreprise) }}" 
+                            <form method="POST" action="{{ route('admin.administrateurs.destroy', $admin) }}" 
                                   class="inline"
-                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');">
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet administrateur ?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:text-red-900 transition-colors" title="Supprimer">
@@ -76,11 +71,11 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-12 text-center">
+                        <td colspan="5" class="px-6 py-12 text-center">
                             <div class="flex flex-col items-center justify-center gap-3">
                                 <i class="fas fa-inbox text-gray-400 text-3xl"></i>
-                                <p class="text-gray-500 font-medium">Aucune entreprise trouvée</p>
-                                <p class="text-sm text-gray-400">Créez une nouvelle entreprise pour commencer.</p>
+                                <p class="text-gray-500 font-medium">Aucun administrateur trouvé</p>
+                                <p class="text-sm text-gray-400">Créez un nouvel administrateur pour commencer.</p>
                             </div>
                         </td>
                     </tr>
@@ -90,15 +85,15 @@
     </div>
 
     <!-- Pagination -->
-    @if($entreprises->hasPages())
+    @if($administrateurs->hasPages())
         <div class="bg-white px-6 py-4 border-t border-gray-200">
-            {{ $entreprises->links() }}
+            {{ $administrateurs->links() }}
         </div>
     @endif
 </div>
 
-<!-- Modal Ajouter/Éditer Entreprise -->
-<div x-data="{ open: false }" @keydown.escape="open = false" x-ref="modalEntreprise" class="relative">
+<!-- Modal Ajouter Administrateur -->
+<div x-data="{ open: false }" @keydown.escape="open = false" x-ref="modalAdmin" class="relative">
     <!-- Modal Backdrop -->
     <div x-show="open" @click="open = false" x-transition:enter="ease-out duration-300" 
          x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -115,34 +110,34 @@
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-screen overflow-y-auto">
             <!-- Header -->
             <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
-                <h3 class="text-lg font-bold text-black-blue">Ajouter une Entreprise</h3>
+                <h3 class="text-lg font-bold text-black-blue">Ajouter un Administrateur</h3>
                 <button @click="open = false" class="text-gray-500 hover:text-gray-700 transition-colors">
                     <i class="fas fa-times text-lg"></i>
                 </button>
             </div>
 
             <!-- Body -->
-            <form action="{{ route('admin.entreprises.store') }}" method="POST" id="modal-form" class="p-6 space-y-4">
+            <form action="{{ route('admin.administrateurs.store') }}" method="POST" id="modal-form-admin" class="p-6 space-y-4">
                 @csrf
 
-                <!-- Raison Sociale -->
+                <!-- Nom -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Raison Sociale *</label>
-                    <input type="text" name="raison_sociale" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green {{ $errors->has('raison_sociale') ? 'border-red-500' : '' }}"
-                           placeholder="Ex: Société XYZ">
-                    @error('raison_sociale')
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
+                    <input type="text" name="nom" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green {{ $errors->has('nom') ? 'border-red-500' : '' }}"
+                           placeholder="Ex: Dupont">
+                    @error('nom')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Siège Social -->
+                <!-- Prénom -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Siège Social *</label>
-                    <input type="text" name="siege_social" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green {{ $errors->has('siege_social') ? 'border-red-500' : '' }}"
-                           placeholder="Ex: Kinshasa, RDC">
-                    @error('siege_social')
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Prénom *</label>
+                    <input type="text" name="prenom" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green {{ $errors->has('prenom') ? 'border-red-500' : '' }}"
+                           placeholder="Ex: Jean">
+                    @error('prenom')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
@@ -152,30 +147,23 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
                     <input type="email" name="email" required
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green {{ $errors->has('email') ? 'border-red-500' : '' }}"
-                           placeholder="entreprise@example.com">
+                           placeholder="admin@example.com">
                     @error('email')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Téléphone -->
+                <!-- Fonction -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
-                    <input type="text" name="telephone"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green"
-                           placeholder="+243 XX XXX XXXX">
-                    @error('telephone')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Forme Juridique -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Forme Juridique *</label>
-                    <input type="text" name="forme_juridique" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green {{ $errors->has('forme_juridique') ? 'border-red-500' : '' }}"
-                           placeholder="Ex: SARL, SA, EIRL">
-                    @error('forme_juridique')
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Fonction *</label>
+                    <select name="fonction" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green {{ $errors->has('fonction') ? 'border-red-500' : '' }}">
+                        <option value="">Sélectionnez une fonction</option>
+                        <option value="Gestionnaire RH">Gestionnaire RH</option>
+                        <option value="Auditeur">Auditeur</option>
+                        <option value="Super Administrateur">Super Administrateur</option>
+                        <option value="Coordinateur">Coordinateur</option>
+                    </select>
+                    @error('fonction')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
@@ -206,7 +194,7 @@
                         class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium">
                     Annuler
                 </button>
-                <button form="modal-form" type="submit" 
+                <button form="modal-form-admin" type="submit" 
                         class="flex-1 px-4 py-2 bg-my-green text-white rounded-lg hover:opacity-90 transition-opacity font-medium">
                     Créer
                 </button>

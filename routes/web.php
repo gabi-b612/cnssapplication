@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EntrepriseController;
 use App\Http\Controllers\Admin\AdministrateurController;
@@ -9,6 +10,11 @@ use App\Http\Controllers\Admin\LiquidationController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Routes d'Authentification
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Routes Admin (protégées par auth:administrateur)
 Route::middleware(['auth:administrateur'])->prefix('admin')->name('admin.')->group(function () {
@@ -23,11 +29,5 @@ Route::middleware(['auth:administrateur'])->prefix('admin')->name('admin.')->gro
     
     // Liquidations
     Route::resource('liquidations', LiquidationController::class);
-    
-    // Logout
-    Route::post('/logout', function () {
-        auth('administrateur')->logout();
-        return redirect('/');
-    })->name('logout');
 });
 
