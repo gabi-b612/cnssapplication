@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('prenom');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('telephone')->nullable();
             $table->date('date_naissance');
             $table->enum('sexe', ['M', 'F']);
+            $table->string('etat_civil')->nullable();
             $table->timestamps();
 
             $table->foreign('entreprise_id')->references('id')->on('entreprises')->onDelete('cascade');

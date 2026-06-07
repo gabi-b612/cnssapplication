@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Travailleur\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreApfRequest extends FormRequest
+class StoreTravailleurRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,18 +14,24 @@ class StoreApfRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'entreprise_id' => 'required|exists:entreprises,id',
             'nom' => 'required|string|max:255',
             'postnom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
-            'email' => 'required|email|unique:apfs,email',
+            'email' => 'required|email|unique:travailleurs,email',
             'password' => 'required|string|min:8|confirmed',
             'telephone' => 'nullable|string|max:20',
+            'date_naissance' => 'required|date',
+            'sexe' => 'required|in:M,F',
+            'etat_civil' => 'nullable|string|max:255',
         ];
     }
 
     public function messages(): array
     {
         return [
+            'entreprise_id.required' => 'L\'ID de l\'entreprise est requis.',
+            'entreprise_id.exists' => 'L\'entreprise sélectionnée n\'existe pas.',
             'nom.required' => 'Le nom est requis.',
             'nom.string' => 'Le nom doit être un texte.',
             'nom.max' => 'Le nom ne doit pas dépasser 255 caractères.',
@@ -44,6 +50,12 @@ class StoreApfRequest extends FormRequest
             'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
             'telephone.string' => 'Le téléphone doit être un texte.',
             'telephone.max' => 'Le téléphone ne doit pas dépasser 20 caractères.',
+            'date_naissance.required' => 'La date de naissance est requise.',
+            'date_naissance.date' => 'Veuillez fournir une date valide.',
+            'sexe.required' => 'Le sexe est requis.',
+            'sexe.in' => 'Le sexe doit être M ou F.',
+            'etat_civil.string' => 'L\'état civil doit être un texte.',
+            'etat_civil.max' => 'L\'état civil ne doit pas dépasser 255 caractères.',
         ];
     }
 }
