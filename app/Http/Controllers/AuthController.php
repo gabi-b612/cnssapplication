@@ -32,7 +32,7 @@ class AuthController extends Controller
                     'administrateur' => redirect()->route('admin.dashboard'),
                     'entreprise' => redirect()->route('entreprise.dashboard'),
                     'travailleur' => redirect()->route('travailleur.dashboard'),
-                    'apf' => redirect()->route('apf.dashboard'),
+                    'apf' => redirect()->route('apf.demandes.index'),
                 };
             }
         }

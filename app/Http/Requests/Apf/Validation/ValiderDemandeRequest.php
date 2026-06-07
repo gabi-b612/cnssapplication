@@ -8,7 +8,7 @@ class ValiderDemandeRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return auth('apf')->check();
     }
 
     public function rules(): array
