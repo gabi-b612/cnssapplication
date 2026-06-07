@@ -132,6 +132,13 @@ return [
         Str::slug((string) env('APP_NAME', 'laravel')).'-session'
     ),
 
+    'guard_cookies' => [
+        'administrateur' => 'CNSS_ADMIN',
+        'entreprise' => 'CNSS_ENTREPRISE',
+        'travailleur' => 'CNSS_TRAVAILLEUR',
+        'apf' => 'CNSS_APF',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Session Cookie Path
