@@ -1,6 +1,9 @@
 <?php
 
-use App\Models\User;
+use App\Models\Administrateur;
+use App\Models\Apf;
+use App\Models\Entreprise;
+use App\Models\Travailleur;
 
 return [
 
@@ -42,6 +45,26 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'administrateur' => [
+            'driver' => 'session',
+            'provider' => 'administrateurs',
+        ],
+
+        'entreprise' => [
+            'driver' => 'session',
+            'provider' => 'entreprises',
+        ],
+
+        'travailleur' => [
+            'driver' => 'session',
+            'provider' => 'travailleurs',
+        ],
+
+        'apf' => [
+            'driver' => 'session',
+            'provider' => 'apfs',
+        ],
     ],
 
     /*
@@ -64,13 +87,28 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', User::class),
+            'model' => env('AUTH_MODEL', \App\Models\User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'administrateurs' => [
+            'driver' => 'eloquent',
+            'model' => Administrateur::class,
+        ],
+
+        'entreprises' => [
+            'driver' => 'eloquent',
+            'model' => Entreprise::class,
+        ],
+
+        'travailleurs' => [
+            'driver' => 'eloquent',
+            'model' => Travailleur::class,
+        ],
+
+        'apfs' => [
+            'driver' => 'eloquent',
+            'model' => Apf::class,
+        ],
     ],
 
     /*
