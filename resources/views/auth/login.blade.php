@@ -68,13 +68,13 @@
 
             <!-- Footer -->
             <div class="mt-6 pt-6 border-t border-gray-200 text-center text-sm text-gray-600">
-                <p>Besoin d'assistance ? <a href="mailto:support@cnss.cd" class="text-my-green font-medium hover:underline">Contactez le support</a></p>
+                <p>Besoin d'assistance ? <a href="" class="text-my-green font-medium hover:underline">Contactez le support</a></p>
             </div>
         </div>
 
         <!-- Footer Info -->
         <div class="mt-8 text-center text-gray-300 text-sm">
-            <p>&copy; 2024 CNSS - RDC. Tous les droits réservés.</p>
+            <p>&copy; 2026 CNSS - RDC. Tous les droits réservés.</p>
         </div>
     </div>
 </body>

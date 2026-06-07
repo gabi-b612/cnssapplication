@@ -20,22 +20,22 @@
 
             <!-- Navigation -->
             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                <a href="{{ route('admin.dashboard') }}" 
+                <a href="{{ route('admin.dashboard') }}"
                    class="block px-4 py-3 rounded-lg transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
                     <i class="fas fa-chart-line mr-2"></i>Dashboard
                 </a>
 
-                <a href="{{ route('admin.entreprises.index') }}" 
+                <a href="{{ route('admin.entreprises.index') }}"
                    class="block px-4 py-3 rounded-lg transition-colors {{ request()->routeIs('admin.entreprises.*') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
                     <i class="fas fa-building mr-2"></i>Entreprises
                 </a>
 
-                <a href="{{ route('admin.administrateurs.index') }}" 
+                <a href="{{ route('admin.administrateurs.index') }}"
                    class="block px-4 py-3 rounded-lg transition-colors {{ request()->routeIs('admin.administrateurs.*') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
                     <i class="fas fa-users mr-2"></i>Administrateurs
                 </a>
 
-                <a href="{{ route('admin.liquidations.index') }}" 
+                <a href="{{ route('admin.liquidations.index') }}"
                    class="block px-4 py-3 rounded-lg transition-colors {{ request()->routeIs('admin.liquidations.*') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
                     <i class="fas fa-money-bill-wave mr-2"></i>Liquidations
                 </a>
@@ -48,7 +48,7 @@
                         <p class="text-sm font-medium">{{ auth('administrateur')->user()->nom ?? 'Admin' }}</p>
                         <p class="text-xs text-gray-400">Administrateur</p>
                     </div>
-                    <form action="{{ route('admin.logout') }}" method="POST" class="inline">
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="text-gray-400 hover:text-my-green transition-colors">
                             <i class="fas fa-sign-out-alt"></i>
