@@ -7,6 +7,10 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EntrepriseController;
 use App\Http\Controllers\Admin\AdministrateurController;
 use App\Http\Controllers\Admin\LiquidationController;
+use App\Http\Controllers\Entreprise\EntrepriseAuthController;
+use App\Http\Controllers\Entreprise\DashboardController as EntrepriseDashboardController;
+use App\Http\Controllers\Entreprise\TravailleurController;
+use App\Http\Controllers\Entreprise\DemandeController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -44,5 +48,24 @@ Route::middleware(['auth:administrateur'])->prefix('admin')->name('admin.')->gro
 
     // Liquidations
     Route::resource('liquidations', LiquidationController::class);
+});
+
+// Routes Entreprise (Employeur)
+Route::prefix('entreprise')->name('entreprise.')->group(function () {
+    Route::middleware('guest:entreprise')->group(function () {
+        Route::get('/login', [EntrepriseAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [EntrepriseAuthController::class, 'login'])->name('login.post');
+    });
+
+    Route::middleware('auth:entreprise')->group(function () {
+        Route::get('/dashboard', [EntrepriseDashboardController::class, 'index'])->name('dashboard');
+        Route::post('/logout', [EntrepriseAuthController::class, 'logout'])->name('logout');
+
+        Route::resource('travailleurs', TravailleurController::class)->except(['show']);
+
+        Route::get('/demandes', [DemandeController::class, 'index'])->name('demandes.index');
+        Route::get('/demandes/create', [DemandeController::class, 'create'])->name('demandes.create');
+        Route::post('/demandes', [DemandeController::class, 'store'])->name('demandes.store');
+    });
 });
 
