@@ -97,9 +97,11 @@ export default {
           800: '#1f2937',
           900: '#111827',
         },
+        'my-green': '#35b675',
+        'black-blue': '#242c4d',
       },
       fontFamily: {
-        sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+        sans: ['Poppins', ...defaultTheme.fontFamily.sans],
       },
     },
   },

@@ -1,6 +1,6 @@
 @props(['type' => 'success', 'message'])
 
-<div x-data="{ show: true }" x-show="show" x-transition
+<div x-data="{ show: true }" x-show="show" x-cloak x-transition
      class="fixed top-4 right-4 z-50 max-w-sm"
      @init="setTimeout(() => show = false, 5000)">
     

@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\AdministrateurController;
 use App\Http\Controllers\Admin\LiquidationController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 //Route::get('/test-create-admin', function () {

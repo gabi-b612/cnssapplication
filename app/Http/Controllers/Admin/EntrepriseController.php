@@ -15,6 +15,12 @@ class EntrepriseController extends Controller
         return view('admin.entreprises', compact('entreprises'));
     }
 
+    public function show(Entreprise $entreprise)
+    {
+        $entreprise->load(['travailleurs', 'demandes']);
+        return view('admin.entreprises.show', compact('entreprise'));
+    }
+
     public function edit(Entreprise $entreprise)
     {
         return view('admin.entreprises.edit', compact('entreprise'));
