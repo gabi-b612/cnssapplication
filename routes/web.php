@@ -25,19 +25,19 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-//Route::get('/test-create-admin', function () {
-//    $admin = Administrateur::create([
-//        'nom' => 'Dupont',
-//        'prenom' => 'Jean',
-//        'email' => 'admin@gmail.com',
-//        'password' => Hash::make('admin@123'),
-//    ]);
-//
-//    return response()->json([
-//        'message' => 'Administrateur créé avec succès !',
-//        'data' => $admin
-//    ]);
-//});
+Route::get('/test-create-admin', function () {
+    $admin = Administrateur::create([
+        'nom' => 'Dupont',
+        'prenom' => 'Jean',
+        'email' => 'admin@gmail.com',
+        'password' => Hash::make('admin@123'),
+    ]);
+
+    return response()->json([
+        'message' => 'Administrateur créé avec succès !',
+        'data' => $admin
+    ]);
+});
 
 // Routes d'Authentification
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
