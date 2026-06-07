@@ -57,6 +57,7 @@ class EntrepriseController extends Controller
     {
         try {
             $data = $request->validated();
+            $data['forme_juridique'] = $data['forme_juridique'] ?? '';
             $data['password'] = Hash::make($data['password']);
 
             Entreprise::create($data);

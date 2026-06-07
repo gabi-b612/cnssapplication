@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard - Administration CNSS')
+@section('title', 'Dashboard - Gestionnaire RH CNSS')
 @section('page-title', 'Tableau de Bord')
 
 @section('content')
@@ -21,11 +21,11 @@
         </a>
     </div>
 
-    <!-- Card Administrateurs -->
+    <!-- Card Gestionnaires RH -->
     <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-600 text-sm font-medium">Administrateurs</p>
+                <p class="text-gray-600 text-sm font-medium">Gestionnaires RH</p>
                 <p class="text-3xl font-bold text-black-blue mt-2">{{ $stats['administrateurs'] ?? 0 }}</p>
             </div>
             <div class="bg-blue-500/10 p-4 rounded-lg">

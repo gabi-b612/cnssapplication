@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'CNSS - Administration')</title>
+    <title>@yield('title', 'CNSS - Gestionnaire RH')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -15,7 +15,7 @@
         <aside class="w-64 bg-black-blue text-white flex flex-col fixed h-screen shadow-xl z-20">
             <div class="p-6 border-b border-white/10">
                 <h1 class="text-2xl font-bold text-my-green tracking-tight">CNSS</h1>
-                <p class="text-xs text-gray-400 mt-1 uppercase tracking-wider">Administration</p>
+                <p class="text-xs text-gray-400 mt-1 uppercase tracking-wider">Gestionnaire RH</p>
             </div>
 
             <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
@@ -43,18 +43,13 @@
                    class="flex items-center px-4 py-3 rounded-lg transition-colors text-sm font-medium {{ request()->routeIs('admin.liquidations.*') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
                     <i class="fas fa-money-bill-wave w-5 mr-3"></i>Liquidations
                 </a>
-
-                <a href="{{ route('admin.configuration.index') }}"
-                   class="flex items-center px-4 py-3 rounded-lg transition-colors text-sm font-medium {{ request()->routeIs('admin.configuration.*') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
-                    <i class="fas fa-cog w-5 mr-3"></i>Configuration
-                </a>
             </nav>
 
             <div class="p-4 border-t border-white/10">
                 <div class="flex items-center justify-between">
                     <div class="min-w-0">
                         <p class="text-sm font-medium truncate">{{ auth('administrateur')->user()->nom ?? 'Admin' }}</p>
-                        <p class="text-xs text-gray-400">Administrateur</p>
+                        <p class="text-xs text-gray-400">Gestionnaire RH</p>
                     </div>
                     <form action="{{ route('logout') }}" method="POST" class="inline shrink-0">
                         @csrf

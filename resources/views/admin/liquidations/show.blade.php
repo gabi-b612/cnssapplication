@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Détails Liquidation - Administration CNSS')
+@section('title', 'Détails Liquidation - Gestionnaire RH CNSS')
 @section('page-title', 'Détails de la Liquidation')
 
 @section('content')
@@ -102,10 +102,10 @@
             </div>
         </div>
 
-        <!-- Section Administrateur -->
+        <!-- Section Gestionnaire RH -->
         <div>
             <h3 class="text-lg font-bold text-black-blue mb-4 flex items-center gap-2">
-                <i class="fas fa-user-tie text-my-green"></i>Administrateur
+                <i class="fas fa-user-tie text-my-green"></i>Gestionnaire RH
             </h3>
             <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
                 <p class="text-xs text-gray-600 uppercase tracking-wide font-medium">Créé par</p>

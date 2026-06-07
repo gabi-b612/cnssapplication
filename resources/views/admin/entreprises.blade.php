@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Entreprises - Administration CNSS')
+@section('title', 'Entreprises - Gestionnaire RH CNSS')
 @section('page-title', 'Gestion des Entreprises')
 
 @section('content')
@@ -58,15 +58,6 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Forme Juridique *</label>
-                <input type="text" name="forme_juridique" value="{{ old('forme_juridique') }}" required
-                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green/50 focus:border-my-green {{ $errors->has('forme_juridique') ? 'border-red-500' : '' }}">
-                @error('forme_juridique')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Mot de Passe *</label>
                 <input type="password" name="password" required
                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green/50 focus:border-my-green {{ $errors->has('password') ? 'border-red-500' : '' }}">
@@ -99,7 +90,7 @@
                         Téléphone
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Forme Juridique
+                        Siège Social
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Date
@@ -114,7 +105,6 @@
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-medium text-black-blue">{{ $entreprise->raison_sociale }}</div>
-                            <div class="text-xs text-gray-500">{{ $entreprise->siege_social }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             {{ $entreprise->email }}
@@ -123,7 +113,7 @@
                             {{ $entreprise->telephone ?? '—' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {{ $entreprise->forme_juridique }}
+                            {{ $entreprise->siege_social }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             {{ $entreprise->created_at->format('d/m/Y') }}

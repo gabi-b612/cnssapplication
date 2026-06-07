@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Liquidations - Administration CNSS')
+@section('title', 'Liquidations - Gestionnaire RH CNSS')
 @section('page-title', 'Liquider les Demandes Validées')
 
 @section('content')

@@ -64,7 +64,7 @@
                 <i class="fas fa-building mr-1"></i> Espace Entreprise
             </a>
             <a href="{{ route('login') }}" class="block text-gray-300 text-sm hover:text-white transition-colors">
-                <i class="fas fa-arrow-left mr-1"></i> Espace Administrateur
+                <i class="fas fa-arrow-left mr-1"></i> Espace Gestionnaire RH
             </a>
         </div>
     </div>

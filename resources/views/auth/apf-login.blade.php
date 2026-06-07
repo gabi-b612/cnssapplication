@@ -61,7 +61,7 @@
 
         <div class="mt-6 text-center">
             <a href="{{ route('login') }}" class="text-gray-300 text-sm hover:text-white transition-colors">
-                <i class="fas fa-arrow-left mr-1"></i> Espace Administrateur
+                <i class="fas fa-arrow-left mr-1"></i> Espace Gestionnaire RH
             </a>
         </div>
     </div>

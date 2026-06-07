@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Éditer Entreprise - Administration CNSS')
+@section('title', 'Éditer Entreprise - Gestionnaire RH CNSS')
 @section('page-title', 'Éditer Entreprise')
 
 @section('content')
@@ -73,16 +73,6 @@
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
-
-                <!-- Forme Juridique -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Forme Juridique *</label>
-                    <input type="text" name="forme_juridique" value="{{ old('forme_juridique', $entreprise->forme_juridique) }}" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green {{ $errors->has('forme_juridique') ? 'border-red-500' : '' }}">
-                    @error('forme_juridique')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Boutons -->

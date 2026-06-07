@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Détails Entreprise - Administration CNSS')
+@section('title', 'Détails Entreprise - Gestionnaire RH CNSS')
 @section('page-title', 'Détails de l\'Entreprise')
 
 @section('content')
@@ -33,10 +33,6 @@
                     <div>
                         <p class="text-xs text-gray-600 uppercase tracking-wide font-medium">Siège Social</p>
                         <p class="text-lg font-medium text-gray-800 mt-1">{{ $entreprise->siege_social }}</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-600 uppercase tracking-wide font-medium">Forme Juridique</p>
-                        <p class="text-lg font-medium text-gray-800 mt-1">{{ $entreprise->forme_juridique }}</p>
                     </div>
                     <div>
                         <p class="text-xs text-gray-600 uppercase tracking-wide font-medium">Email</p>
