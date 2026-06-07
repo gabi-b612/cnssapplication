@@ -25,11 +25,13 @@ class StoreLiquidationRequest extends FormRequest
         return [
             'demande_id.required' => 'La demande est requise.',
             'demande_id.exists' => 'La demande sélectionnée n\'existe pas.',
+            'demande_id.unique' => 'Cette demande a déjà été liquidée.',
             'montant.required' => 'Le montant est requis.',
             'montant.numeric' => 'Le montant doit être un nombre.',
             'montant.gt' => 'Le montant doit être strictement supérieur à 0.',
             'date_liquidation.required' => 'La date de liquidation est requise.',
             'date_liquidation.date' => 'Veuillez fournir une date valide.',
+            'date_liquidation.before_or_equal' => 'La date de liquidation ne peut pas être dans le futur.',
         ];
     }
 }

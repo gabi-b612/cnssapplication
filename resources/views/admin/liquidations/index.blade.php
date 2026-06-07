@@ -61,6 +61,14 @@
                                     @csrf
                                     <input type="hidden" name="demande_id" value="{{ $demande->id }}">
 
+                                    @if($errors->any() && old('demande_id') == $demande->id)
+                                        <div class="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700 space-y-1">
+                                            @foreach($errors->all() as $error)
+                                                <p><i class="fas fa-exclamation-circle mr-1"></i>{{ $error }}</p>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
                                     <div class="p-4 bg-gray-50 rounded-lg text-sm space-y-2">
                                         <p><span class="text-gray-600">Bénéficiaire :</span> <strong>{{ $demande->travailleur?->prenom }} {{ $demande->travailleur?->nom }}</strong></p>
                                         <p><span class="text-gray-600">Type :</span> <strong>{{ ucfirst(str_replace('_', ' ', $demande->type_allocation)) }}</strong></p>
