@@ -18,6 +18,8 @@ use App\Http\Controllers\Entreprise\DemandeController as EntrepriseDemandeContro
 use App\Http\Controllers\Apf\ApfAuthController;
 use App\Http\Controllers\Apf\DashboardController as ApfDashboardController;
 use App\Http\Controllers\Apf\DemandeController as ApfDemandeController;
+use App\Http\Controllers\Travailleur\TravailleurAuthController;
+use App\Http\Controllers\Travailleur\DashboardController as TravailleurDashboardController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -103,6 +105,19 @@ Route::prefix('apf')->name('apf.')->group(function () {
 
         Route::get('/demandes-a-traiter', [ApfDemandeController::class, 'index'])->name('demandes.index');
         Route::post('/demandes/{demande}/valider', [ApfDemandeController::class, 'valider'])->name('demandes.valider');
+    });
+});
+
+// Routes Travailleur
+Route::prefix('travailleur')->name('travailleur.')->group(function () {
+    Route::middleware('guest:travailleur')->group(function () {
+        Route::get('/login', [TravailleurAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [TravailleurAuthController::class, 'login'])->name('login.post');
+    });
+
+    Route::middleware('auth:travailleur')->group(function () {
+        Route::get('/dashboard', [TravailleurDashboardController::class, 'index'])->name('dashboard');
+        Route::post('/logout', [TravailleurAuthController::class, 'logout'])->name('logout');
     });
 });
 
