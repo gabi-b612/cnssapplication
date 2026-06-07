@@ -14,9 +14,9 @@ class StoreLiquidationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'demande_id' => 'required|exists:demandes,id',
+            'demande_id' => 'required|exists:demandes,id|unique:liquidations,demande_id',
             'montant' => 'required|numeric|gt:0',
-            'date_liquidation' => 'required|date',
+            'date_liquidation' => 'required|date|before_or_equal:today',
         ];
     }
 

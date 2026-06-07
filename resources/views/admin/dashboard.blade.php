@@ -61,6 +61,9 @@
                 <i class="fas fa-money-bill-wave text-yellow-500 text-2xl"></i>
             </div>
         </div>
+        <a href="{{ route('admin.liquidations.historique') }}" class="text-my-green text-sm font-medium mt-4 inline-block hover:underline">
+            Voir l'historique →
+        </a>
     </div>
 
     <!-- Card Demandes -->
