@@ -34,6 +34,11 @@
                     <i class="fas fa-users w-5 mr-3"></i>Administrateurs
                 </a>
 
+                <a href="{{ route('admin.apfs.index') }}"
+                   class="flex items-center px-4 py-3 rounded-lg transition-colors text-sm font-medium {{ request()->routeIs('admin.apfs.*') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
+                    <i class="fas fa-user-shield w-5 mr-3"></i>Agents APF
+                </a>
+
                 <a href="{{ route('admin.liquidations.index') }}"
                    class="flex items-center px-4 py-3 rounded-lg transition-colors text-sm font-medium {{ request()->routeIs('admin.liquidations.*') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
                     <i class="fas fa-money-bill-wave w-5 mr-3"></i>Liquidations

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EntrepriseController;
 use App\Http\Controllers\Admin\AdministrateurController;
 use App\Http\Controllers\Admin\LiquidationController;
+use App\Http\Controllers\Admin\ApfController;
 use App\Http\Controllers\Entreprise\EntrepriseAuthController;
 use App\Http\Controllers\Entreprise\DashboardController as EntrepriseDashboardController;
 use App\Http\Controllers\Entreprise\TravailleurController;
@@ -48,6 +49,9 @@ Route::middleware(['auth:administrateur'])->prefix('admin')->name('admin.')->gro
 
     // Administrateurs
     Route::resource('administrateurs', AdministrateurController::class);
+
+    // Agents APF
+    Route::resource('apfs', ApfController::class)->except(['show', 'create']);
 
     // Liquidations
     Route::resource('liquidations', LiquidationController::class);

@@ -8,7 +8,7 @@ class StoreApfRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return auth('administrateur')->check();
     }
 
     public function rules(): array

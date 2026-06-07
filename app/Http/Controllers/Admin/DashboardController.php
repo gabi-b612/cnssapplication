@@ -7,6 +7,7 @@ use App\Models\Entreprise;
 use App\Models\Administrateur;
 use App\Models\Demande;
 use App\Models\Liquidation;
+use App\Models\Apf;
 
 class DashboardController extends Controller
 {
@@ -17,6 +18,7 @@ class DashboardController extends Controller
             'administrateurs' => Administrateur::count(),
             'demandes' => Demande::count(),
             'liquidations' => Liquidation::count(),
+            'apfs' => Apf::count(),
         ];
 
         return view('admin.dashboard', compact('stats'));
