@@ -75,7 +75,7 @@
                                     </div>
 
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Montant (USD) *</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Montant (CDF) *</label>
                                         <input type="number" name="montant" step="0.01" min="0.01" value="{{ old('demande_id') == $demande->id ? old('montant') : '' }}" required
                                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green/50 focus:border-my-green {{ $errors->has('montant') && old('demande_id') == $demande->id ? 'border-red-500' : '' }}">
                                         @if($errors->has('montant') && old('demande_id') == $demande->id)
