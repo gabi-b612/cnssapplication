@@ -65,7 +65,7 @@
                 <div class="px-8 py-4 flex items-center justify-between">
                     <h2 class="text-2xl font-bold text-black-blue">@yield('page-title', 'Dashboard')</h2>
                     <div class="flex items-center gap-4">
-                        <span class="text-sm text-gray-600">{{ now()->format('d/m/Y H:i') }}</span>
+
                     </div>
                 </div>
             </div>
