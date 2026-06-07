@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreAdministrateurRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'nom' => 'required|string|max:255',
+            'postnom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'email' => 'required|email|unique:administrateurs,email',
+            'password' => 'required|string|min:8|confirmed',
+            'telephone' => 'nullable|string|max:20',
+            'fonction' => 'required|string|max:255',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nom.required' => 'Le nom est requis.',
+            'nom.string' => 'Le nom doit être un texte.',
+            'nom.max' => 'Le nom ne doit pas dépasser 255 caractères.',
+            'postnom.required' => 'Le postnom est requis.',
+            'postnom.string' => 'Le postnom doit être un texte.',
+            'postnom.max' => 'Le postnom ne doit pas dépasser 255 caractères.',
+            'prenom.required' => 'Le prénom est requis.',
+            'prenom.string' => 'Le prénom doit être un texte.',
+            'prenom.max' => 'Le prénom ne doit pas dépasser 255 caractères.',
+            'email.required' => 'L\'adresse email est requise.',
+            'email.email' => 'Veuillez fournir une adresse email valide.',
+            'email.unique' => 'Cette adresse email est déjà utilisée.',
+            'password.required' => 'Le mot de passe est requis.',
+            'password.string' => 'Le mot de passe doit être un texte.',
+            'password.min' => 'Le mot de passe doit comporter au moins 8 caractères.',
+            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+            'telephone.string' => 'Le téléphone doit être un texte.',
+            'telephone.max' => 'Le téléphone ne doit pas dépasser 20 caractères.',
+            'fonction.required' => 'La fonction est requise.',
+            'fonction.string' => 'La fonction doit être un texte.',
+            'fonction.max' => 'La fonction ne doit pas dépasser 255 caractères.',
+        ];
+    }
+}
