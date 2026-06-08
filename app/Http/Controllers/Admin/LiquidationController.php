@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Store\StoreLiquidationRequest;
 use App\Models\Liquidation;
 use App\Models\Demande;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class LiquidationController extends Controller
 {
@@ -50,9 +52,22 @@ class LiquidationController extends Controller
 
             return redirect()->route('admin.liquidations.index')
                 ->with('success', 'Liquidation enregistrée avec succès.');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('admin.liquidations.index')
+                ->with('error', 'Cette demande n\'est plus disponible pour liquidation.')
+                ->withInput();
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Erreur lors de la création de la liquidation.')
+            Log::error('Erreur création liquidation', [
+                'message' => $e->getMessage(),
+                'demande_id' => $request->input('demande_id'),
+            ]);
+
+            $message = config('app.debug')
+                ? 'Erreur lors de la création de la liquidation : ' . $e->getMessage()
+                : 'Erreur lors de la création de la liquidation. Veuillez réessayer.';
+
+            return redirect()->route('admin.liquidations.index')
+                ->with('error', $message)
                 ->withInput();
         }
     }

@@ -17,7 +17,7 @@
                 <tr class="bg-gray-50 border-b border-gray-200">
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID Demande</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Travailleur</th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Montant (USD)</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Montant (CDF)</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date Liquidation</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Administrateur</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Statut</th>
@@ -34,7 +34,7 @@
                             {{ $liquidation->demande?->travailleur?->prenom }} {{ $liquidation->demande?->travailleur?->nom }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="text-sm font-bold text-my-green">${{ number_format($liquidation->montant, 2, '.', ',') }}</span>
+                            <span class="text-sm font-bold text-my-green">{{ number_format($liquidation->montant, 2, ',', ' ') }} FC</span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             {{ $liquidation->date_liquidation->format('d/m/Y') }}

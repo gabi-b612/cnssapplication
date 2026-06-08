@@ -79,8 +79,8 @@
             <div class="p-6 bg-gradient-to-r from-my-green/10 to-my-green/5 rounded-lg border border-my-green/20">
                 <div class="text-center">
                     <p class="text-gray-600 text-sm mb-2">Montant</p>
-                    <p class="text-5xl font-bold text-my-green">${{ number_format($liquidation->montant, 2, '.', ',') }}</p>
-                    <p class="text-xs text-gray-500 mt-4">USD - Dollars Américains</p>
+                    <p class="text-5xl font-bold text-my-green">{{ number_format($liquidation->montant, 2, ',', ' ') }} FC</p>
+                    <p class="text-xs text-gray-500 mt-4">CDF — Franc congolais</p>
                 </div>
             </div>
         </div>
@@ -141,30 +141,12 @@
                 </div>
                 <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
                     <span class="text-gray-600">Montant</span>
-                    <span class="font-bold text-my-green">${{ number_format($liquidation->montant, 2) }}</span>
+                    <span class="font-bold text-my-green">{{ number_format($liquidation->montant, 2, ',', ' ') }} FC</span>
                 </div>
                 <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
                     <span class="text-gray-600">Type</span>
                     <span class="font-medium text-black-blue">{{ ucfirst(str_replace('_', ' ', $liquidation->demande->type_allocation)) }}</span>
                 </div>
-            </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-sm font-bold text-black-blue uppercase tracking-wide mb-4">Actions</h3>
-            <div class="space-y-2">
-                <button onclick="window.print()" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2">
-                    <i class="fas fa-print"></i>Imprimer
-                </button>
-                <form action="{{ route('admin.liquidations.destroy', $liquidation) }}" method="POST"
-                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette liquidation ?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
-                        Supprimer
-                    </button>
-                </form>
             </div>
         </div>
     </div>
