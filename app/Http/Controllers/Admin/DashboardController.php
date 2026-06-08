@@ -8,6 +8,7 @@ use App\Models\Administrateur;
 use App\Models\Demande;
 use App\Models\Liquidation;
 use App\Models\Apf;
+use App\Models\Travailleur;
 
 class DashboardController extends Controller
 {
@@ -17,7 +18,9 @@ class DashboardController extends Controller
             'entreprises' => Entreprise::count(),
             'administrateurs' => Administrateur::count(),
             'demandes' => Demande::count(),
+            'demandes_validees' => Demande::where('statut', 'validee')->count(),
             'liquidations' => Liquidation::count(),
+            'travailleurs' => Travailleur::count(),
             'apfs' => Apf::count(),
         ];
 

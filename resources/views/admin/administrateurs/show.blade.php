@@ -58,34 +58,32 @@
         <!-- Liquidations Créées -->
         <div>
             <h3 class="text-lg font-bold text-black-blue mb-4 flex items-center gap-2">
-                <i class="fas fa-file-invoice-dollar text-my-green"></i>Liquidations ({{ $administrateur->liquidations->count() }})
+                <i class="fas fa-file-invoice-dollar text-my-green"></i>Liquidations ({{ $liquidations->count() }})
             </h3>
-            @if($administrateur->liquidations->count() > 0)
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="bg-gray-50 border-b">
-                                <th class="px-4 py-2 text-left text-gray-600 font-medium">ID</th>
-                                <th class="px-4 py-2 text-left text-gray-600 font-medium">Montant</th>
-                                <th class="px-4 py-2 text-left text-gray-600 font-medium">Date</th>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-gray-50 border-b">
+                            <th class="px-4 py-2 text-left text-gray-600 font-medium">ID</th>
+                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Montant</th>
+                            <th class="px-4 py-2 text-left text-gray-600 font-medium">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        @forelse($liquidations as $liquidation)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 font-medium text-black-blue">#{{ $liquidation->id }}</td>
+                                <td class="px-4 py-2 font-bold text-my-green">${{ number_format($liquidation->montant, 2) }}</td>
+                                <td class="px-4 py-2">{{ $liquidation->date_liquidation->format('d/m/Y') }}</td>
                             </tr>
-                        </thead>
-                        <tbody class="divide-y">
-                            @foreach($administrateur->liquidations as $liquidation)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 font-medium text-black-blue">#{{ $liquidation->id }}</td>
-                                    <td class="px-4 py-2 font-bold text-my-green">${{ number_format($liquidation->montant, 2) }}</td>
-                                    <td class="px-4 py-2">{{ $liquidation->date_liquidation->format('d/m/Y') }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @else
-                <div class="p-4 bg-gray-50 rounded-lg text-center">
-                    <p class="text-gray-500">Aucune liquidation créée par cet administrateur.</p>
-                </div>
-            @endif
+                        @empty
+                            <tr>
+                                <td colspan="3" class="px-4 py-8 text-center text-gray-500">Aucune donnée disponible</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

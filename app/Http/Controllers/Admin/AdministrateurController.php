@@ -18,7 +18,9 @@ class AdministrateurController extends Controller
     public function show(Administrateur $administrateur)
     {
         $administrateur->load('liquidations');
-        return view('admin.administrateurs.show', compact('administrateur'));
+        $liquidations = $administrateur->liquidations ?? collect();
+
+        return view('admin.administrateurs.show', compact('administrateur', 'liquidations'));
     }
 
     public function edit(Administrateur $administrateur)

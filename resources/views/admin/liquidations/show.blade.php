@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="mb-6">
-    <a href="{{ route('admin.liquidations.index') }}" class="text-my-green hover:underline flex items-center gap-2">
+    <a href="{{ route('admin.liquidations.historique') }}" class="text-my-green hover:underline flex items-center gap-2">
         <i class="fas fa-arrow-left"></i>Retour à la liste
     </a>
 </div>
@@ -35,8 +35,9 @@
                 <div>
                     <p class="text-xs text-gray-600 uppercase tracking-wide font-medium">Statut Demande</p>
                     <p class="mt-1">
-                        <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                            <i class="fas fa-check-circle mr-1"></i>Validée
+                        @php $statutDemande = $liquidation->demande->statut; @endphp
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-medium {{ $statutDemande === 'liquidee' ? 'bg-my-green/10 text-my-green' : 'bg-green-100 text-green-700' }}">
+                            <i class="fas fa-check-circle mr-1"></i>{{ ucfirst(str_replace('_', ' ', $statutDemande)) }}
                         </span>
                     </p>
                 </div>

@@ -8,10 +8,13 @@ use App\Http\Controllers\Admin\EntrepriseController;
 use App\Http\Controllers\Admin\AdministrateurController;
 use App\Http\Controllers\Admin\LiquidationController;
 use App\Http\Controllers\Admin\ApfController;
+use App\Http\Controllers\Admin\TravailleurController as AdminTravailleurController;
+use App\Http\Controllers\Admin\DemandeController as AdminDemandeController;
+use App\Http\Controllers\Admin\ConfigurationController;
 use App\Http\Controllers\Entreprise\EntrepriseAuthController;
 use App\Http\Controllers\Entreprise\DashboardController as EntrepriseDashboardController;
-use App\Http\Controllers\Entreprise\TravailleurController;
-use App\Http\Controllers\Entreprise\DemandeController;
+use App\Http\Controllers\Entreprise\TravailleurController as EntrepriseTravailleurController;
+use App\Http\Controllers\Entreprise\DemandeController as EntrepriseDemandeController;
 use App\Http\Controllers\Apf\ApfAuthController;
 use App\Http\Controllers\Apf\DashboardController as ApfDashboardController;
 use App\Http\Controllers\Apf\DemandeController as ApfDemandeController;
@@ -53,8 +56,19 @@ Route::middleware(['auth:administrateur'])->prefix('admin')->name('admin.')->gro
     // Agents APF
     Route::resource('apfs', ApfController::class)->except(['show', 'create']);
 
+    // Travailleurs
+    Route::get('/travailleurs', [AdminTravailleurController::class, 'index'])->name('travailleurs.index');
+
+    // Demandes validées
+    Route::get('/demandes-validees', [AdminDemandeController::class, 'index'])->name('demandes-validees.index');
+
+    // Configuration
+    Route::get('/configuration', [ConfigurationController::class, 'index'])->name('configuration.index');
+    Route::put('/configuration', [ConfigurationController::class, 'update'])->name('configuration.update');
+
     // Liquidations
-    Route::resource('liquidations', LiquidationController::class);
+    Route::get('/liquidations/historique', [LiquidationController::class, 'historique'])->name('liquidations.historique');
+    Route::resource('liquidations', LiquidationController::class)->except(['create', 'edit', 'update']);
 });
 
 // Routes Entreprise (Employeur)
@@ -68,11 +82,11 @@ Route::prefix('entreprise')->name('entreprise.')->group(function () {
         Route::get('/dashboard', [EntrepriseDashboardController::class, 'index'])->name('dashboard');
         Route::post('/logout', [EntrepriseAuthController::class, 'logout'])->name('logout');
 
-        Route::resource('travailleurs', TravailleurController::class)->except(['show']);
+        Route::resource('travailleurs', EntrepriseTravailleurController::class)->except(['show']);
 
-        Route::get('/demandes', [DemandeController::class, 'index'])->name('demandes.index');
-        Route::get('/demandes/create', [DemandeController::class, 'create'])->name('demandes.create');
-        Route::post('/demandes', [DemandeController::class, 'store'])->name('demandes.store');
+        Route::get('/demandes', [EntrepriseDemandeController::class, 'index'])->name('demandes.index');
+        Route::get('/demandes/create', [EntrepriseDemandeController::class, 'create'])->name('demandes.create');
+        Route::post('/demandes', [EntrepriseDemandeController::class, 'store'])->name('demandes.store');
     });
 });
 
