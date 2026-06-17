@@ -16,6 +16,7 @@ use App\Http\Controllers\Entreprise\DashboardController as EntrepriseDashboardCo
 use App\Http\Controllers\Entreprise\TravailleurController as EntrepriseTravailleurController;
 use App\Http\Controllers\Entreprise\DemandeController as EntrepriseDemandeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\Apf\ApfAuthController;
 use App\Http\Controllers\Apf\DashboardController as ApfDashboardController;
 use App\Http\Controllers\Apf\DemandeController as ApfDemandeController;
@@ -43,6 +44,10 @@ Route::get('/test-create-admin', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/documents/{demande}/{index}', [DocumentController::class, 'show'])
+    ->name('documents.show')
+    ->where('index', '[0-9]+');
 
 // Routes Admin (protégées par auth:administrateur)
 Route::middleware(['auth:administrateur'])->prefix('admin')->name('admin.')->group(function () {

@@ -13,8 +13,8 @@
 | Statuts demande | ✅ 6 statuts + historique | Brouillon → Soumise → En vérification → Approuvée → Payée / Rejetée |
 | Montants allocations | ✅ Montants fixes FC en config | Maternité **72 000 FC**, familiale **24 300 FC**, prénatale **16 200 FC** |
 | Déclaration employeur | 1 demande = 1 travailleur + 1 type | Plusieurs demandes possibles par travailleur |
-| PDF | Liens `storage/...` (ouverture externe) | Lecteur PDF intégré dans l'app |
-| Notifications | Aucune | Email à la validation et à la liquidation |
+| PDF | ✅ Route sécurisée, ouverture nouvel onglet | Consultation PDF fiable |
+| Notifications | ✅ Email approbation + liquidation | Email à la validation et à la liquidation |
 | Page d'accueil | ✅ Page `/` avec logo + liens espaces | Page d'accueil CNSS avec logo |
 | Rapports | Dashboard basique (compteurs) | Rapports statistiques exportables |
 | Facture | Non | PDF facture après liquidation |
@@ -31,8 +31,8 @@
 | 4 | F08 | Logo CNSS & page d'accueil | 🟢 Facile | ✅ Fait |
 | 5 | F03 | Conditions d'éligibilité par type | 🟠 Moyenne | ⬜ À faire |
 | 6 | F04 | Déclaration multiple (employeur) | 🟠 Moyenne | ⬜ À faire |
-| 7 | F07 | Lecteur PDF intégré | 🔴 Haute | ⬜ À faire |
-| 8 | F09 | Notifications email | 🔴 Haute | ⬜ À faire |
+| 7 | F07 | Consultation PDF (nouvel onglet) | 🔴 Haute | ✅ Fait |
+| 8 | F09 | Notifications email | 🔴 Haute | ✅ Fait |
 | 9 | F11 | Génération facture PDF | 🟠 Moyenne | ⬜ À faire |
 | 10 | F12 | Rapports statistiques | 🟠 Moyenne | ⬜ À faire |
 | 11 | F06 | Réclamation travailleur | 🟡 Basse | ⬜ À faire |
@@ -102,9 +102,13 @@
 
 ---
 
-### F07 — Lecteur PDF intégré
+### F07 — Consultation PDF
 
-**Statut :** ⬜ À faire
+**Statut :** ✅ Fait (approche simplifiée)
+
+- Route sécurisée `documents.show` avec contrôle d'accès par rôle
+- Ouverture du PDF dans un **nouvel onglet** du navigateur (`target="_blank"`)
+- Lien symbolique `storage` requis : `php artisan storage:link`
 
 ---
 
@@ -120,9 +124,12 @@
 
 ### F09 — Notifications email
 
-**Statut :** ⬜ À faire
+**Statut :** ✅ Fait
 
----
+- **Approbation APF** → `DemandeApprouveeNotification` → employeur + travailleur
+- **Liquidation admin** → `DemandeLiquideeNotification` → employeur + travailleur
+- Config SMTP dans `.env` (voir `.env.example`)
+- En local : `MAIL_MAILER=log` écrit les emails dans `storage/logs/laravel.log`
 
 ### F11 — Facture PDF après liquidation
 
@@ -143,19 +150,20 @@
 | 2026-06-17 | — | Création du document de suivi | — |
 | 2026-06-17 | F01, F05 | Statuts + fiches détail employeur/travailleur | — |
 | 2026-06-17 | F02, F08 | Montants fixes FC + page d'accueil | — |
-| 2026-06-17 | F10 | Retiré du périmètre (SMS non prévu) | — |
+| 2026-06-17 | F07, F09 | PDF nouvel onglet + notifications email | — |
 
 ---
 
 ## Prochaine étape
 
-**F07 (lecteur PDF)** ou **F03 (éligibilité)** — selon priorité métier.
+**F03 (éligibilité)** ou **F11 (facture PDF)** — selon priorité métier.
 
 ---
 
 ## Notes techniques
 
 - **Guards auth :** `administrateur`, `entreprise`, `travailleur`, `apf`
-- **Documents :** JSON array dans `demandes.documents`, stockage `public/documents`
+- **Documents :** route `GET /documents/{demande}/{index}`, stockage `storage/app/public/documents`
+- **Emails :** `App\Notifications\DemandeApprouveeNotification`, `DemandeLiquideeNotification`
 - **Liquidation :** table `liquidations` liée 1:1 à `demandes`
 - **Montants :** `App\Services\AllocationCalculator` + colonnes `montant_allocation_*` dans `configurations`

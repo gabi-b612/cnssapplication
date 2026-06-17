@@ -5,10 +5,16 @@ namespace App\Http\Controllers\Apf;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Apf\Validation\ValiderDemandeRequest;
 use App\Models\Demande;
+use App\Services\DemandeNotifier;
 use Illuminate\Support\Facades\DB;
 
 class DemandeController extends Controller
 {
+    public function __construct(
+        private DemandeNotifier $demandeNotifier
+    ) {
+    }
+
     public function index()
     {
         $demandes = Demande::with(['travailleur', 'entreprise'])
@@ -25,16 +31,16 @@ class DemandeController extends Controller
             ->whereIn('statut', [Demande::STATUT_SOUMISE, Demande::STATUT_EN_VERIFICATION])
             ->firstOrFail();
 
+        $nouveauStatut = $request->validated('statut');
+
         try {
-            DB::transaction(function () use ($request, $demande) {
+            DB::transaction(function () use ($request, $demande, $nouveauStatut) {
                 $apfId = auth('apf')->id();
 
                 if ($demande->statut === Demande::STATUT_SOUMISE) {
                     $demande->changeStatut(Demande::STATUT_EN_VERIFICATION, 'apf', $apfId);
                     $demande->update(['apf_id' => $apfId]);
                 }
-
-                $nouveauStatut = $request->validated('statut');
 
                 $demande->changeStatut(
                     $nouveauStatut,
@@ -48,7 +54,11 @@ class DemandeController extends Controller
                 }
             });
 
-            $message = $request->validated('statut') === Demande::STATUT_APPROUVEE
+            if ($nouveauStatut === Demande::STATUT_APPROUVEE) {
+                $this->demandeNotifier->notifyApprouvee($demande->fresh());
+            }
+
+            $message = $nouveauStatut === Demande::STATUT_APPROUVEE
                 ? 'Demande approuvée avec succès.'
                 : 'Demande rejetée avec succès.';
 

@@ -60,11 +60,8 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 @if($demande->documents)
                                     <div class="flex flex-col gap-1">
-                                        @foreach($demande->documents as $document)
-                                            <a href="{{ asset('storage/' . $document) }}" target="_blank"
-                                               class="text-my-green hover:underline text-xs inline-flex items-center gap-1">
-                                                <i class="fas fa-file-pdf"></i>PDF
-                                            </a>
+                                        @foreach($demande->documents as $index => $document)
+                                            <x-demande-document-link :demande="$demande" :index="$index" label="PDF" class="text-xs" />
                                         @endforeach
                                     </div>
                                 @else

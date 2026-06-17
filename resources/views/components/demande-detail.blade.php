@@ -68,10 +68,7 @@
                 <ul class="space-y-2">
                     @foreach($demande->documents as $index => $document)
                         <li>
-                            <a href="{{ asset('storage/' . $document) }}" target="_blank"
-                               class="inline-flex items-center gap-2 text-my-green hover:underline text-sm">
-                                <i class="fas fa-file-pdf"></i>Document {{ $index + 1 }}
-                            </a>
+                            <x-demande-document-link :demande="$demande" :index="$index" />
                         </li>
                     @endforeach
                 </ul>
