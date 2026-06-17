@@ -43,6 +43,11 @@
                    class="flex items-center px-4 py-3 rounded-lg transition-colors text-sm font-medium {{ request()->routeIs('admin.liquidations.*') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
                     <i class="fas fa-money-bill-wave w-5 mr-3"></i>Liquidations
                 </a>
+
+                <a href="{{ route('admin.rapports.index') }}"
+                   class="flex items-center px-4 py-3 rounded-lg transition-colors text-sm font-medium {{ request()->routeIs('admin.rapports.*') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
+                    <i class="fas fa-chart-bar w-5 mr-3"></i>Rapports
+                </a>
             </nav>
 
             <div class="p-4 border-t border-white/10">

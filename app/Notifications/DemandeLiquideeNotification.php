@@ -48,6 +48,7 @@ class DemandeLiquideeNotification extends Notification
             ->line('**Montant versé :** ' . AllocationCalculator::formaterMontant($this->liquidation->montant))
             ->line('**Date de liquidation :** ' . $this->liquidation->date_liquidation->format('d/m/Y'))
             ->action('Consulter la demande', $url)
+            ->line('**Facture :** ' . route('factures.download', $this->liquidation))
             ->salutation('CNSS — Caisse Nationale de Sécurité Sociale');
     }
 }

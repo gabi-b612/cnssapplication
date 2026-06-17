@@ -124,6 +124,11 @@ class Demande extends Model
         return $this->hasMany(DemandeStatutHistorique::class)->orderBy('created_at');
     }
 
+    public function reclamations(): HasMany
+    {
+        return $this->hasMany(Reclamation::class)->latest();
+    }
+
     public function changeStatut(
         string $nouveauStatut,
         ?string $acteurType = null,

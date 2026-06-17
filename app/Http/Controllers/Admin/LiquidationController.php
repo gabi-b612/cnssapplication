@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\Store\StoreLiquidationRequest;
 use App\Models\Liquidation;
 use App\Models\Demande;
 use App\Services\DemandeNotifier;
+use App\Services\FacturePdfService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,8 @@ use Illuminate\Support\Facades\Log;
 class LiquidationController extends Controller
 {
     public function __construct(
-        private DemandeNotifier $demandeNotifier
+        private DemandeNotifier $demandeNotifier,
+        private FacturePdfService $facturePdfService
     ) {
     }
 
@@ -53,7 +55,9 @@ class LiquidationController extends Controller
                     ->whereDoesntHave('liquidation')
                     ->firstOrFail();
 
-                $liquidation = Liquidation::create($data);
+                $liquidation = Liquidation::create(array_merge($data, [
+                    'numero_facture' => $this->facturePdfService->genererNumeroFacture(),
+                ]));
 
                 $demande->changeStatut(
                     Demande::STATUT_PAYEE,

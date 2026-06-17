@@ -10,6 +10,7 @@ class Liquidation extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
+        'numero_facture',
         'demande_id',
         'administrateur_id',
         'montant',

@@ -12,12 +12,14 @@
 |--------|----------------------|----------------|
 | Statuts demande | ✅ 6 statuts + historique | Brouillon → Soumise → En vérification → Approuvée → Payée / Rejetée |
 | Montants allocations | ✅ Montants fixes FC en config | Maternité **72 000 FC**, familiale **24 300 FC**, prénatale **16 200 FC** |
-| Déclaration employeur | 1 demande = 1 travailleur + 1 type | Plusieurs demandes possibles par travailleur |
+| Déclaration employeur | ✅ Plusieurs demandes par travailleur (types distincts) | Plusieurs demandes possibles par travailleur |
+| Éligibilité | ✅ Filtre sexe + validation serveur | Maternité/prénatale réservées aux travailleuses |
 | PDF | ✅ Route sécurisée, ouverture nouvel onglet | Consultation PDF fiable |
 | Notifications | ✅ Email approbation + liquidation | Email à la validation et à la liquidation |
 | Page d'accueil | ✅ Page `/` avec logo + liens espaces | Page d'accueil CNSS avec logo |
-| Rapports | Dashboard basique (compteurs) | Rapports statistiques exportables |
-| Facture | Non | PDF facture après liquidation |
+| Rapports | ✅ Rapports statistiques + export CSV | Rapports statistiques exportables |
+| Facture | ✅ PDF facture après liquidation | PDF facture après liquidation |
+| Réclamations | ✅ Formulaire travailleur | Réclamation sur demande rejetée / en vérification |
 
 ---
 
@@ -29,13 +31,13 @@
 | 2 | F02 | Montants fixes & calcul des allocations | 🔴 Haute | ✅ Fait |
 | 3 | F05 | Consulter statut / détail dossier | 🔴 Haute | ✅ Fait |
 | 4 | F08 | Logo CNSS & page d'accueil | 🟢 Facile | ✅ Fait |
-| 5 | F03 | Conditions d'éligibilité par type | 🟠 Moyenne | ⬜ À faire |
-| 6 | F04 | Déclaration multiple (employeur) | 🟠 Moyenne | ⬜ À faire |
+| 5 | F03 | Conditions d'éligibilité par type | 🟠 Moyenne | ✅ Fait |
+| 6 | F04 | Déclaration multiple (employeur) | 🟠 Moyenne | ✅ Fait |
 | 7 | F07 | Consultation PDF (nouvel onglet) | 🔴 Haute | ✅ Fait |
 | 8 | F09 | Notifications email | 🔴 Haute | ✅ Fait |
-| 9 | F11 | Génération facture PDF | 🟠 Moyenne | ⬜ À faire |
-| 10 | F12 | Rapports statistiques | 🟠 Moyenne | ⬜ À faire |
-| 11 | F06 | Réclamation travailleur | 🟡 Basse | ⬜ À faire |
+| 9 | F11 | Génération facture PDF | 🟠 Moyenne | ✅ Fait |
+| 10 | F12 | Rapports statistiques | 🟠 Moyenne | ✅ Fait |
+| 11 | F06 | Réclamation travailleur | 🟡 Basse | ✅ Fait |
 
 > **F10 (SMS)** — supprimé du périmètre, non prévu.
 
@@ -75,13 +77,22 @@
 
 ### F03 — Conditions d'éligibilité
 
-**Statut :** ⬜ À faire — **règles métier à valider**
+**Statut :** ✅ Fait
+
+- Service `App\Services\DemandeEligibilityService`
+- Maternité et prénatale réservées aux travailleuses (`sexe = F`)
+- Validation côté serveur dans `StoreDemandeRequest`
+- Filtrage dynamique des types dans le formulaire de création (Alpine.js)
 
 ---
 
 ### F04 — Déclaration multiple par l'employeur
 
-**Statut :** ⬜ À faire
+**Statut :** ✅ Fait
+
+- Un travailleur peut avoir plusieurs demandes de types différents
+- Blocage d'un doublon : même travailleur + même type tant que la demande n'est pas payée ou rejetée
+- Tableau « Demandes en cours » sur le dashboard employeur
 
 ---
 
@@ -98,7 +109,11 @@
 
 ### F06 — Réclamation travailleur
 
-**Statut :** ⬜ À faire
+**Statut :** ✅ Fait
+
+- Table `reclamations` (message, statut en_attente / traitee)
+- Formulaire sur la fiche demande (statuts `rejetee` ou `en_verification`)
+- Route `POST travailleur/demandes/{demande}/reclamations`
 
 ---
 
@@ -127,19 +142,27 @@
 **Statut :** ✅ Fait
 
 - **Approbation APF** → `DemandeApprouveeNotification` → employeur + travailleur
-- **Liquidation admin** → `DemandeLiquideeNotification` → employeur + travailleur
+- **Liquidation admin** → `DemandeLiquideeNotification` → employeur + travailleur (+ lien facture)
 - Config SMTP dans `.env` (voir `.env.example`)
-- En local : `MAIL_MAILER=log` écrit les emails dans `storage/logs/laravel.log`
 
 ### F11 — Facture PDF après liquidation
 
-**Statut :** ⬜ À faire
+**Statut :** ✅ Fait
+
+- Numéro facture auto `FAC-YYYY-NNNNN` à la liquidation
+- Template `resources/views/pdf/facture.blade.php` (DomPDF)
+- Téléchargement via `GET /factures/{liquidation}` (employeur, travailleur, admin)
+- Bouton sur la fiche détail demande payée
 
 ---
 
 ### F12 — Rapports statistiques
 
-**Statut :** ⬜ À faire
+**Statut :** ✅ Fait
+
+- Page admin `/admin/rapports` : totaux, répartition par statut/type, top entreprises
+- Filtre par période (date début / fin)
+- Export CSV `GET /admin/rapports/export`
 
 ---
 
@@ -151,12 +174,13 @@
 | 2026-06-17 | F01, F05 | Statuts + fiches détail employeur/travailleur | — |
 | 2026-06-17 | F02, F08 | Montants fixes FC + page d'accueil | — |
 | 2026-06-17 | F07, F09 | PDF nouvel onglet + notifications email | — |
+| 2026-06-17 | F03, F04, F06, F11, F12 | Éligibilité, doublons, facture, rapports, réclamations | — |
 
 ---
 
 ## Prochaine étape
 
-**F03 (éligibilité)** ou **F11 (facture PDF)** — selon priorité métier.
+**Toutes les fonctionnalités du périmètre sont implémentées.** Tests manuels recommandés avant mise en production.
 
 ---
 
@@ -164,6 +188,9 @@
 
 - **Guards auth :** `administrateur`, `entreprise`, `travailleur`, `apf`
 - **Documents :** route `GET /documents/{demande}/{index}`, stockage `storage/app/public/documents`
+- **Factures :** route `GET /factures/{liquidation}`, génération DomPDF
 - **Emails :** `App\Notifications\DemandeApprouveeNotification`, `DemandeLiquideeNotification`
-- **Liquidation :** table `liquidations` liée 1:1 à `demandes`
+- **Liquidation :** table `liquidations` liée 1:1 à `demandes`, colonne `numero_facture`
 - **Montants :** `App\Services\AllocationCalculator` + colonnes `montant_allocation_*` dans `configurations`
+- **Éligibilité :** `App\Services\DemandeEligibilityService`
+- **Réclamations :** table `reclamations`, modèle `App\Models\Reclamation`

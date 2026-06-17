@@ -68,4 +68,41 @@
         <p><i class="fas fa-map-marker-alt text-my-green mr-2"></i>{{ $entreprise->siege_social }}</p>
     </div>
 </div>
+
+@if($demandesEnCours->isNotEmpty())
+<div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-black-blue">Demandes en cours</h3>
+        <a href="{{ route('entreprise.demandes.index') }}" class="text-my-green text-sm font-medium hover:underline">Voir tout →</a>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead>
+                <tr class="bg-gray-50 border-b border-gray-200">
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Réf.</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Travailleur</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Statut</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @foreach($demandesEnCours as $demande)
+                    <tr class="hover:bg-gray-50 transition-colors cursor-pointer" onclick="window.location='{{ route('entreprise.demandes.show', $demande) }}'">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-black-blue">#{{ $demande->id }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {{ $demande->travailleur->nom }} {{ $demande->travailleur->postnom }} {{ $demande->travailleur->prenom }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ ucfirst(str_replace('_', ' ', $demande->type_allocation)) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <x-demande-statut-badge :statut="$demande->statut" />
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $demande->created_at->format('d/m/Y') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endif
 @endsection

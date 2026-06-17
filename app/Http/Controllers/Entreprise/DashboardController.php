@@ -19,6 +19,13 @@ class DashboardController extends Controller
             'demandes_rejetees' => $entreprise->demandes()->where('statut', Demande::STATUT_REJETEE)->count(),
         ];
 
-        return view('entreprise.dashboard', compact('stats', 'entreprise'));
+        $demandesEnCours = $entreprise->demandes()
+            ->with('travailleur')
+            ->whereNotIn('statut', [Demande::STATUT_PAYEE, Demande::STATUT_REJETEE])
+            ->latest()
+            ->limit(10)
+            ->get();
+
+        return view('entreprise.dashboard', compact('stats', 'entreprise', 'demandesEnCours'));
     }
 }

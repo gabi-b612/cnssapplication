@@ -15,7 +15,7 @@ class DemandeController extends Controller
             abort(404);
         }
 
-        $demande->load(['entreprise', 'apf', 'liquidation', 'statutHistoriques']);
+        $demande->load(['entreprise', 'apf', 'liquidation', 'statutHistoriques', 'reclamations']);
 
         return view('travailleur.demandes.show', compact('demande'));
     }

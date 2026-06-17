@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ApfController;
 use App\Http\Controllers\Admin\TravailleurController as AdminTravailleurController;
 use App\Http\Controllers\Admin\DemandeController as AdminDemandeController;
 use App\Http\Controllers\Admin\ConfigurationController;
+use App\Http\Controllers\Admin\RapportController;
 use App\Http\Controllers\Entreprise\EntrepriseAuthController;
 use App\Http\Controllers\Entreprise\DashboardController as EntrepriseDashboardController;
 use App\Http\Controllers\Entreprise\TravailleurController as EntrepriseTravailleurController;
@@ -23,6 +24,8 @@ use App\Http\Controllers\Apf\DemandeController as ApfDemandeController;
 use App\Http\Controllers\Travailleur\TravailleurAuthController;
 use App\Http\Controllers\Travailleur\DashboardController as TravailleurDashboardController;
 use App\Http\Controllers\Travailleur\DemandeController as TravailleurDemandeController;
+use App\Http\Controllers\Travailleur\ReclamationController as TravailleurReclamationController;
+use App\Http\Controllers\FactureController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -48,6 +51,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/documents/{demande}/{index}', [DocumentController::class, 'show'])
     ->name('documents.show')
     ->where('index', '[0-9]+');
+
+Route::get('/factures/{liquidation}', [FactureController::class, 'download'])
+    ->name('factures.download');
 
 // Routes Admin (protégées par auth:administrateur)
 Route::middleware(['auth:administrateur'])->prefix('admin')->name('admin.')->group(function () {
@@ -76,6 +82,10 @@ Route::middleware(['auth:administrateur'])->prefix('admin')->name('admin.')->gro
     // Liquidations
     Route::get('/liquidations/historique', [LiquidationController::class, 'historique'])->name('liquidations.historique');
     Route::resource('liquidations', LiquidationController::class)->except(['create', 'edit', 'update']);
+
+    // Rapports
+    Route::get('/rapports', [RapportController::class, 'index'])->name('rapports.index');
+    Route::get('/rapports/export', [RapportController::class, 'export'])->name('rapports.export');
 });
 
 // Routes Entreprise (Employeur)
@@ -124,6 +134,7 @@ Route::prefix('travailleur')->name('travailleur.')->group(function () {
     Route::middleware('auth:travailleur')->group(function () {
         Route::get('/dashboard', [TravailleurDashboardController::class, 'index'])->name('dashboard');
         Route::get('/demandes/{demande}', [TravailleurDemandeController::class, 'show'])->name('demandes.show');
+        Route::post('/demandes/{demande}/reclamations', [TravailleurReclamationController::class, 'store'])->name('demandes.reclamations.store');
         Route::post('/logout', [TravailleurAuthController::class, 'logout'])->name('logout');
     });
 });
