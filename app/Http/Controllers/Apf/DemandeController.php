@@ -55,15 +55,23 @@ class DemandeController extends Controller
             });
 
             if ($nouveauStatut === Demande::STATUT_APPROUVEE) {
-                $this->demandeNotifier->notifyApprouvee($demande->fresh());
+                $emailSent = $this->demandeNotifier->notifyApprouvee($demande->fresh());
+            } else {
+                $emailSent = true;
             }
 
             $message = $nouveauStatut === Demande::STATUT_APPROUVEE
                 ? 'Demande approuvée avec succès.'
                 : 'Demande rejetée avec succès.';
 
-            return redirect()->route('apf.demandes.index')
+            $redirect = redirect()->route('apf.demandes.index')
                 ->with('success', $message);
+
+            if ($nouveauStatut === Demande::STATUT_APPROUVEE && !($emailSent ?? true)) {
+                $redirect->with('error', 'Demande approuvée, mais l\'envoi des emails a échoué. Vérifiez la configuration SMTP dans .env.');
+            }
+
+            return $redirect;
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Erreur lors du traitement de la demande.');

@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Log;
 
 class DemandeNotifier
 {
-    public function notifyApprouvee(Demande $demande): void
+    public function notifyApprouvee(Demande $demande): bool
     {
         $demande->loadMissing(['entreprise', 'travailleur']);
 
-        $this->sendSafely(function () use ($demande) {
+        return $this->sendSafely(function () use ($demande) {
             if ($demande->entreprise?->email) {
                 $demande->entreprise->notify(new DemandeApprouveeNotification($demande));
             }
@@ -25,11 +25,11 @@ class DemandeNotifier
         }, 'approuvee', $demande->id);
     }
 
-    public function notifyLiquidee(Demande $demande, Liquidation $liquidation): void
+    public function notifyLiquidee(Demande $demande, Liquidation $liquidation): bool
     {
         $demande->loadMissing(['entreprise', 'travailleur']);
 
-        $this->sendSafely(function () use ($demande, $liquidation) {
+        return $this->sendSafely(function () use ($demande, $liquidation) {
             if ($demande->entreprise?->email) {
                 $demande->entreprise->notify(new DemandeLiquideeNotification($demande, $liquidation));
             }
@@ -40,15 +40,19 @@ class DemandeNotifier
         }, 'liquidee', $demande->id);
     }
 
-    private function sendSafely(callable $callback, string $type, int $demandeId): void
+    private function sendSafely(callable $callback, string $type, int $demandeId): bool
     {
         try {
             $callback();
+
+            return true;
         } catch (\Throwable $e) {
             Log::warning("Échec envoi notification email ({$type})", [
                 'demande_id' => $demandeId,
                 'message' => $e->getMessage(),
             ]);
+
+            return false;
         }
     }
 }

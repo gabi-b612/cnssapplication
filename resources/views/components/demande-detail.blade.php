@@ -29,12 +29,13 @@
                         @if($demande->statut === \App\Models\Demande::STATUT_PAYEE && $demande->liquidation)
                             <p class="text-my-green font-bold text-lg mt-1">{{ \App\Services\AllocationCalculator::formaterMontant($demande->liquidation->montant) }}</p>
                             <p class="text-xs text-gray-500 mt-1">Liquidée le {{ $demande->liquidation->date_liquidation->format('d/m/Y') }}</p>
-                            @if($demande->liquidation->numero_facture)
-                                <a href="{{ route('factures.download', $demande->liquidation) }}"
-                                   class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-my-green text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity">
-                                    <i class="fas fa-file-invoice"></i>Télécharger la facture ({{ $demande->liquidation->numero_facture }})
-                                </a>
-                            @endif
+                            <a href="{{ route('factures.download', $demande->liquidation) }}"
+                               class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-my-green text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity">
+                                <i class="fas fa-file-invoice"></i>Télécharger la facture
+                                @if($demande->liquidation->numero_facture)
+                                    ({{ $demande->liquidation->numero_facture }})
+                                @endif
+                            </a>
                         @else
                             <p class="text-my-green font-bold text-lg mt-1">{{ \App\Services\AllocationCalculator::formaterMontant($montantReference) }}</p>
                         @endif
