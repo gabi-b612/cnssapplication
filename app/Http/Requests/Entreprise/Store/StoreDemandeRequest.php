@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Entreprise\Store;
 
+use App\Models\Travailleur;
+use App\Services\DemandeEligibilityService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,6 +27,32 @@ class StoreDemandeRequest extends FormRequest
             'documents' => 'required|array|min:1',
             'documents.*' => 'required|file|mimes:pdf|max:2048',
         ];
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            if ($validator->errors()->isNotEmpty()) {
+                return;
+            }
+
+            $travailleur = Travailleur::find($this->input('travailleur_id'));
+            $type = $this->input('type_allocation');
+
+            if (!$travailleur || !$type) {
+                return;
+            }
+
+            $eligibility = app(DemandeEligibilityService::class);
+
+            if ($message = $eligibility->messageIneligibilite($travailleur, $type)) {
+                $validator->errors()->add('type_allocation', $message);
+            }
+
+            if ($message = $eligibility->messageDoublon($travailleur->id, $type)) {
+                $validator->errors()->add('type_allocation', $message);
+            }
+        });
     }
 
     public function messages(): array

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Éditer Agent APF - Administration CNSS')
+@section('title', 'Éditer Agent APF - Gestionnaire RH CNSS')
 @section('page-title', 'Éditer Agent APF')
 
 @section('content')

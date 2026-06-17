@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Détails Liquidation - Administration CNSS')
+@section('title', 'Détails Liquidation - Gestionnaire RH CNSS')
 @section('page-title', 'Détails de la Liquidation')
 
 @section('content')
@@ -35,10 +35,7 @@
                 <div>
                     <p class="text-xs text-gray-600 uppercase tracking-wide font-medium">Statut Demande</p>
                     <p class="mt-1">
-                        @php $statutDemande = $liquidation->demande->statut; @endphp
-                        <span class="inline-block px-3 py-1 rounded-full text-xs font-medium {{ $statutDemande === 'liquidee' ? 'bg-my-green/10 text-my-green' : 'bg-green-100 text-green-700' }}">
-                            <i class="fas fa-check-circle mr-1"></i>{{ ucfirst(str_replace('_', ' ', $statutDemande)) }}
-                        </span>
+                        <x-demande-statut-badge :statut="$liquidation->demande->statut" />
                     </p>
                 </div>
             </div>
@@ -79,10 +76,17 @@
             <div class="p-6 bg-gradient-to-r from-my-green/10 to-my-green/5 rounded-lg border border-my-green/20">
                 <div class="text-center">
                     <p class="text-gray-600 text-sm mb-2">Montant</p>
-                    <p class="text-5xl font-bold text-my-green">{{ number_format($liquidation->montant, 2, ',', ' ') }} FC</p>
-                    <p class="text-xs text-gray-500 mt-4">CDF — Franc congolais</p>
+                    <p class="text-5xl font-bold text-my-green">{{ \App\Services\AllocationCalculator::formaterMontant($liquidation->montant) }}</p>
+                    <p class="text-xs text-gray-500 mt-4">Franc congolais (FC)</p>
                 </div>
             </div>
+
+            @if($liquidation->justification_ajustement)
+                <div class="mt-4 p-4 bg-yellow-50 border border-yellow-100 rounded-lg">
+                    <p class="text-xs text-yellow-800 uppercase tracking-wide font-medium mb-1">Justification de l'ajustement</p>
+                    <p class="text-sm text-yellow-900">{{ $liquidation->justification_ajustement }}</p>
+                </div>
+            @endif
         </div>
 
         <!-- Section Dates -->
@@ -102,10 +106,10 @@
             </div>
         </div>
 
-        <!-- Section Administrateur -->
+        <!-- Section Gestionnaire RH -->
         <div>
             <h3 class="text-lg font-bold text-black-blue mb-4 flex items-center gap-2">
-                <i class="fas fa-user-tie text-my-green"></i>Administrateur
+                <i class="fas fa-user-tie text-my-green"></i>Gestionnaire RH
             </h3>
             <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
                 <p class="text-xs text-gray-600 uppercase tracking-wide font-medium">Créé par</p>
@@ -141,7 +145,7 @@
                 </div>
                 <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
                     <span class="text-gray-600">Montant</span>
-                    <span class="font-bold text-my-green">{{ number_format($liquidation->montant, 2, ',', ' ') }} FC</span>
+                    <span class="font-bold text-my-green">{{ \App\Services\AllocationCalculator::formaterMontant($liquidation->montant) }}</span>
                 </div>
                 <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
                     <span class="text-gray-600">Type</span>

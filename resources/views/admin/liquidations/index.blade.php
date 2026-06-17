@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Liquidations - Administration CNSS')
+@section('title', 'Liquidations - Gestionnaire RH CNSS')
 @section('page-title', 'Liquider les Demandes Validées')
 
 @section('content')
@@ -25,6 +25,9 @@
             </thead>
             <tbody class="divide-y divide-gray-200">
                 @forelse($demandes as $demande)
+                    @php
+                        $montantSuggere = app(\App\Services\AllocationCalculator::class)->montantPourType($demande->type_allocation);
+                    @endphp
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-medium text-black-blue">#{{ $demande->id }}</div>
@@ -72,14 +75,26 @@
                                     <div class="p-4 bg-gray-50 rounded-lg text-sm space-y-2">
                                         <p><span class="text-gray-600">Bénéficiaire :</span> <strong>{{ $demande->travailleur?->prenom }} {{ $demande->travailleur?->nom }}</strong></p>
                                         <p><span class="text-gray-600">Type :</span> <strong>{{ ucfirst(str_replace('_', ' ', $demande->type_allocation)) }}</strong></p>
+                                        <p><span class="text-gray-600">Montant suggéré :</span> <strong class="text-my-green">{{ \App\Services\AllocationCalculator::formaterMontant($montantSuggere) }}</strong></p>
                                     </div>
 
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Montant (CDF) *</label>
-                                        <input type="number" name="montant" step="0.01" min="0.01" value="{{ old('demande_id') == $demande->id ? old('montant') : '' }}" required
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Montant (FC) *</label>
+                                        <input type="number" name="montant" step="1" min="1"
+                                               value="{{ old('demande_id') == $demande->id ? old('montant') : (int) $montantSuggere }}" required
                                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green/50 focus:border-my-green {{ $errors->has('montant') && old('demande_id') == $demande->id ? 'border-red-500' : '' }}">
                                         @if($errors->has('montant') && old('demande_id') == $demande->id)
                                             <p class="text-red-500 text-xs mt-1">{{ $errors->first('montant') }}</p>
+                                        @endif
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Justification (si montant modifié)</label>
+                                        <textarea name="justification_ajustement" rows="2"
+                                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green/50 focus:border-my-green text-sm {{ $errors->has('justification_ajustement') && old('demande_id') == $demande->id ? 'border-red-500' : '' }}"
+                                                  placeholder="Obligatoire si le montant diffère du montant suggéré...">{{ old('demande_id') == $demande->id ? old('justification_ajustement') : '' }}</textarea>
+                                        @if($errors->has('justification_ajustement') && old('demande_id') == $demande->id)
+                                            <p class="text-red-500 text-xs mt-1">{{ $errors->first('justification_ajustement') }}</p>
                                         @endif
                                     </div>
 

@@ -29,7 +29,7 @@
                 </a>
 
                 <a href="{{ route('entreprise.demandes.index') }}"
-                   class="flex items-center px-4 py-3 rounded-lg transition-colors text-sm font-medium {{ request()->routeIs('entreprise.demandes.index') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
+                   class="flex items-center px-4 py-3 rounded-lg transition-colors text-sm font-medium {{ request()->routeIs('entreprise.demandes.*') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
                     <i class="fas fa-file-contract w-5 mr-3"></i>Mes Demandes
                 </a>
 

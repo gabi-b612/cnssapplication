@@ -19,7 +19,6 @@ class StoreEntrepriseRequest extends FormRequest
             'email' => 'required|email|unique:entreprises,email',
             'password' => 'required|string|min:8|confirmed',
             'telephone' => 'nullable|string|max:20',
-            'forme_juridique' => 'required|string|max:255',
         ];
     }
 
@@ -41,9 +40,6 @@ class StoreEntrepriseRequest extends FormRequest
             'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
             'telephone.string' => 'Le téléphone doit être un texte.',
             'telephone.max' => 'Le téléphone ne doit pas dépasser 20 caractères.',
-            'forme_juridique.required' => 'La forme juridique est requise.',
-            'forme_juridique.string' => 'La forme juridique doit être un texte.',
-            'forme_juridique.max' => 'La forme juridique ne doit pas dépasser 255 caractères.',
         ];
     }
 }

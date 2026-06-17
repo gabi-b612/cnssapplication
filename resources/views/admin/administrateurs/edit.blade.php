@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Éditer Administrateur - Administration CNSS')
-@section('page-title', 'Éditer Administrateur')
+@section('title', 'Éditer Gestionnaire RH - Gestionnaire RH CNSS')
+@section('page-title', 'Éditer Gestionnaire RH')
 
 @section('content')
 <div class="mb-6">
@@ -14,7 +14,7 @@
     <!-- Formulaire Principal -->
     <div class="lg:col-span-2">
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold text-black-blue mb-6">Informations de l'Administrateur</h2>
+            <h2 class="text-xl font-bold text-black-blue mb-6">Informations du Gestionnaire RH</h2>
 
             @if ($errors->any())
                 <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -138,14 +138,14 @@
             <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
                 <h3 class="text-sm font-bold text-red-600 uppercase tracking-wide mb-4">Actions Dangereuses</h3>
                 <p class="text-xs text-gray-600 mb-4">
-                    Supprimer cet administrateur le rendra inaccessible.
+                    Supprimer ce gestionnaire RH le rendra inaccessible.
                 </p>
                 <form action="{{ route('admin.administrateurs.destroy', $administrateur) }}" method="POST"
                       onsubmit="return confirm('Êtes-vous absolument sûr ? Cette action est irréversible.');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
-                        Supprimer l'administrateur
+                        Supprimer le gestionnaire RH
                     </button>
                 </form>
             </div>

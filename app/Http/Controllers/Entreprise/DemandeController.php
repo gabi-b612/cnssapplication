@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Entreprise\Store\StoreDemandeRequest;
 use App\Models\Demande;
 use App\Models\Travailleur;
+use App\Services\AllocationCalculator;
+use Illuminate\Support\Facades\DB;
 
 class DemandeController extends Controller
 {
@@ -20,6 +22,19 @@ class DemandeController extends Controller
         return view('entreprise.demandes', compact('demandes'));
     }
 
+    public function show(Demande $demande)
+    {
+        $entrepriseId = auth('entreprise')->id();
+
+        if ($demande->entreprise_id !== $entrepriseId) {
+            abort(404);
+        }
+
+        $demande->load(['travailleur', 'apf', 'liquidation', 'statutHistoriques']);
+
+        return view('entreprise.demandes.show', compact('demande'));
+    }
+
     public function create()
     {
         $travailleurs = auth('entreprise')->user()
@@ -27,7 +42,9 @@ class DemandeController extends Controller
             ->orderBy('nom')
             ->get();
 
-        return view('entreprise.demandes.create', compact('travailleurs'));
+        $montants = app(AllocationCalculator::class)->montantsParType();
+
+        return view('entreprise.demandes.create', compact('travailleurs', 'montants'));
     }
 
     public function store(StoreDemandeRequest $request)
@@ -46,13 +63,22 @@ class DemandeController extends Controller
                 }
             }
 
-            Demande::create([
-                'entreprise_id' => $entrepriseId,
-                'travailleur_id' => $travailleur->id,
-                'type_allocation' => $request->validated('type_allocation'),
-                'statut' => 'en_attente',
-                'documents' => $documentPaths,
-            ]);
+            DB::transaction(function () use ($entrepriseId, $travailleur, $request, $documentPaths) {
+                $demande = Demande::create([
+                    'entreprise_id' => $entrepriseId,
+                    'travailleur_id' => $travailleur->id,
+                    'type_allocation' => $request->validated('type_allocation'),
+                    'statut' => Demande::STATUT_SOUMISE,
+                    'documents' => $documentPaths,
+                ]);
+
+                $demande->statutHistoriques()->create([
+                    'ancien_statut' => null,
+                    'nouveau_statut' => Demande::STATUT_SOUMISE,
+                    'acteur_type' => 'entreprise',
+                    'acteur_id' => $entrepriseId,
+                ]);
+            });
 
             return redirect()->route('entreprise.demandes.index')
                 ->with('success', 'Demande soumise avec succès.');

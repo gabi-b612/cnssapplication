@@ -11,36 +11,49 @@ use App\Http\Controllers\Admin\ApfController;
 use App\Http\Controllers\Admin\TravailleurController as AdminTravailleurController;
 use App\Http\Controllers\Admin\DemandeController as AdminDemandeController;
 use App\Http\Controllers\Admin\ConfigurationController;
+use App\Http\Controllers\Admin\RapportController;
 use App\Http\Controllers\Entreprise\EntrepriseAuthController;
 use App\Http\Controllers\Entreprise\DashboardController as EntrepriseDashboardController;
 use App\Http\Controllers\Entreprise\TravailleurController as EntrepriseTravailleurController;
 use App\Http\Controllers\Entreprise\DemandeController as EntrepriseDemandeController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\Apf\ApfAuthController;
 use App\Http\Controllers\Apf\DashboardController as ApfDashboardController;
 use App\Http\Controllers\Apf\DemandeController as ApfDemandeController;
+use App\Http\Controllers\Travailleur\TravailleurAuthController;
+use App\Http\Controllers\Travailleur\DashboardController as TravailleurDashboardController;
+use App\Http\Controllers\Travailleur\DemandeController as TravailleurDemandeController;
+use App\Http\Controllers\Travailleur\ReclamationController as TravailleurReclamationController;
+use App\Http\Controllers\FactureController;
 
-Route::get('/', function () {
-    return redirect()->route('login');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/test-create-admin', function () {
+    $admin = Administrateur::create([
+        'nom' => 'Dupont',
+        'prenom' => 'Jean',
+        'email' => 'admin@gmail.com',
+        'password' => Hash::make('admin@123'),
+    ]);
+
+    return response()->json([
+        'message' => 'Administrateur créé avec succès !',
+        'data' => $admin
+    ]);
 });
-
-//Route::get('/test-create-admin', function () {
-//    $admin = Administrateur::create([
-//        'nom' => 'Dupont',
-//        'prenom' => 'Jean',
-//        'email' => 'admin@gmail.com',
-//        'password' => Hash::make('admin@123'),
-//    ]);
-//
-//    return response()->json([
-//        'message' => 'Administrateur créé avec succès !',
-//        'data' => $admin
-//    ]);
-//});
 
 // Routes d'Authentification
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/documents/{demande}/{index}', [DocumentController::class, 'show'])
+    ->name('documents.show')
+    ->where('index', '[0-9]+');
+
+Route::get('/factures/{liquidation}', [FactureController::class, 'download'])
+    ->name('factures.download');
 
 // Routes Admin (protégées par auth:administrateur)
 Route::middleware(['auth:administrateur'])->prefix('admin')->name('admin.')->group(function () {
@@ -69,6 +82,10 @@ Route::middleware(['auth:administrateur'])->prefix('admin')->name('admin.')->gro
     // Liquidations
     Route::get('/liquidations/historique', [LiquidationController::class, 'historique'])->name('liquidations.historique');
     Route::resource('liquidations', LiquidationController::class)->except(['create', 'edit', 'update']);
+
+    // Rapports
+    Route::get('/rapports', [RapportController::class, 'index'])->name('rapports.index');
+    Route::get('/rapports/export', [RapportController::class, 'export'])->name('rapports.export');
 });
 
 // Routes Entreprise (Employeur)
@@ -87,6 +104,7 @@ Route::prefix('entreprise')->name('entreprise.')->group(function () {
         Route::get('/demandes', [EntrepriseDemandeController::class, 'index'])->name('demandes.index');
         Route::get('/demandes/create', [EntrepriseDemandeController::class, 'create'])->name('demandes.create');
         Route::post('/demandes', [EntrepriseDemandeController::class, 'store'])->name('demandes.store');
+        Route::get('/demandes/{demande}', [EntrepriseDemandeController::class, 'show'])->name('demandes.show');
     });
 });
 
@@ -103,6 +121,21 @@ Route::prefix('apf')->name('apf.')->group(function () {
 
         Route::get('/demandes-a-traiter', [ApfDemandeController::class, 'index'])->name('demandes.index');
         Route::post('/demandes/{demande}/valider', [ApfDemandeController::class, 'valider'])->name('demandes.valider');
+    });
+});
+
+// Routes Travailleur
+Route::prefix('travailleur')->name('travailleur.')->group(function () {
+    Route::middleware('guest:travailleur')->group(function () {
+        Route::get('/login', [TravailleurAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [TravailleurAuthController::class, 'login'])->name('login.post');
+    });
+
+    Route::middleware('auth:travailleur')->group(function () {
+        Route::get('/dashboard', [TravailleurDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/demandes/{demande}', [TravailleurDemandeController::class, 'show'])->name('demandes.show');
+        Route::post('/demandes/{demande}/reclamations', [TravailleurReclamationController::class, 'store'])->name('demandes.reclamations.store');
+        Route::post('/logout', [TravailleurAuthController::class, 'logout'])->name('logout');
     });
 });
 

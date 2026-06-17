@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Historique Liquidations - Administration CNSS')
+@section('title', 'Historique Liquidations - Gestionnaire RH CNSS')
 @section('page-title', 'Historique des Liquidations')
 
 @section('content')
@@ -17,9 +17,9 @@
                 <tr class="bg-gray-50 border-b border-gray-200">
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID Demande</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Travailleur</th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Montant (CDF)</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Montant (FC)</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date Liquidation</th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Administrateur</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Gestionnaire RH</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Statut</th>
                     <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                 </tr>
@@ -34,7 +34,7 @@
                             {{ $liquidation->demande?->travailleur?->prenom }} {{ $liquidation->demande?->travailleur?->nom }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="text-sm font-bold text-my-green">{{ number_format($liquidation->montant, 2, ',', ' ') }} FC</span>
+                            <span class="text-sm font-bold text-my-green">{{ \App\Services\AllocationCalculator::formaterMontant($liquidation->montant) }}</span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             {{ $liquidation->date_liquidation->format('d/m/Y') }}
@@ -44,7 +44,7 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="inline-block px-3 py-1 bg-my-green/10 text-my-green rounded-full text-xs font-medium">
-                                <i class="fas fa-check-circle mr-1"></i>Liquidée
+                                <i class="fas fa-check-circle mr-1"></i>Payée
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

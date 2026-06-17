@@ -21,11 +21,12 @@
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Statut</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Documents</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
                 @forelse($demandes as $demande)
-                    <tr class="hover:bg-gray-50 transition-colors">
+                    <tr class="hover:bg-gray-50 transition-colors cursor-pointer" onclick="window.location='{{ route('entreprise.demandes.show', $demande) }}'">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-black-blue">
                             #{{ $demande->id }}
                         </td>
@@ -36,19 +37,7 @@
                             {{ ucfirst($demande->type_allocation) }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @if($demande->statut === 'en_attente')
-                                <span class="inline-flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">
-                                    <i class="fas fa-clock mr-1"></i>En attente
-                                </span>
-                            @elseif($demande->statut === 'validee')
-                                <span class="inline-flex items-center px-3 py-1 bg-my-green/10 text-my-green rounded-full text-xs font-semibold">
-                                    <i class="fas fa-check-circle mr-1"></i>Validée
-                                </span>
-                            @else
-                                <span class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
-                                    <i class="fas fa-times-circle mr-1"></i>Rejetée
-                                </span>
-                            @endif
+                            <x-demande-statut-badge :statut="$demande->statut" />
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             @if($demande->documents)
@@ -62,10 +51,17 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                             {{ $demande->created_at->format('d/m/Y') }}
                         </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                            <a href="{{ route('entreprise.demandes.show', $demande) }}"
+                               class="text-my-green hover:underline font-medium"
+                               onclick="event.stopPropagation()">
+                                Consulter →
+                            </a>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-12 text-center">
+                        <td colspan="7" class="px-6 py-12 text-center">
                             <div class="flex flex-col items-center justify-center gap-3">
                                 <i class="fas fa-file-contract text-gray-300 text-3xl"></i>
                                 <p class="text-gray-500 font-medium">Aucune demande soumise</p>

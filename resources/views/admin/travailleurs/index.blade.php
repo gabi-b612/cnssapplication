@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Travailleurs - Administration CNSS')
+@section('title', 'Travailleurs - Gestionnaire RH CNSS')
 @section('page-title', 'Gestion des Travailleurs')
 
 @section('content')

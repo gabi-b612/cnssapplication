@@ -20,12 +20,29 @@
             </a>
         </div>
     @else
-        <form action="{{ route('entreprise.demandes.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('entreprise.demandes.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6"
+              x-data="{
+                  type: '{{ old('type_allocation') }}',
+                  travailleurId: '{{ old('travailleur_id') }}',
+                  montants: @js($montants),
+                  travailleurs: @js($travailleurs->map(fn ($t) => ['id' => $t->id, 'sexe' => $t->sexe])->values()),
+                  typeOptions: [
+                      { value: 'familiale', label: 'Allocation familiale' },
+                      { value: 'maternite', label: 'Allocation maternité' },
+                      { value: 'prenatale', label: 'Allocation prénatale' },
+                  ],
+                  get typesEligibles() {
+                      const t = this.travailleurs.find(t => String(t.id) === String(this.travailleurId));
+                      if (!t) return ['familiale', 'maternite', 'prenatale'];
+                      return t.sexe === 'F' ? ['familiale', 'maternite', 'prenatale'] : ['familiale'];
+                  }
+              }">
             @csrf
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Travailleur concerné *</label>
-                <select name="travailleur_id" required
+                <select name="travailleur_id" required x-model="travailleurId"
+                        @change="if (!typesEligibles.includes(type)) type = ''"
                         class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green/50 focus:border-my-green {{ $errors->has('travailleur_id') ? 'border-red-500' : '' }}">
                     <option value="">Sélectionnez un travailleur</option>
                     @foreach($travailleurs as $travailleur)
@@ -41,16 +58,21 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Type d'allocation *</label>
-                <select name="type_allocation" required
+                <select name="type_allocation" required x-model="type"
                         class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green/50 focus:border-my-green {{ $errors->has('type_allocation') ? 'border-red-500' : '' }}">
                     <option value="">Sélectionnez le type</option>
-                    <option value="familiale" @selected(old('type_allocation') === 'familiale')>Allocation familiale</option>
-                    <option value="maternite" @selected(old('type_allocation') === 'maternite')>Allocation maternité</option>
-                    <option value="prenatale" @selected(old('type_allocation') === 'prenatale')>Allocation prénatale</option>
+                    <template x-for="opt in typeOptions.filter(o => typesEligibles.includes(o.value))" :key="opt.value">
+                        <option :value="opt.value" x-text="opt.label"></option>
+                    </template>
                 </select>
                 @error('type_allocation')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
+
+                <div x-show="type" x-cloak class="mt-3 p-4 bg-my-green/5 border border-my-green/20 rounded-lg">
+                    <p class="text-xs text-gray-600 uppercase tracking-wide font-medium">Montant de référence</p>
+                    <p class="text-my-green font-bold text-lg mt-1" x-text="montants[type] ? new Intl.NumberFormat('fr-FR').format(montants[type]) + ' FC' : ''"></p>
+                </div>
             </div>
 
             <div>

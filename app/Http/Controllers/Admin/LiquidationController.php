@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Store\StoreLiquidationRequest;
 use App\Models\Liquidation;
 use App\Models\Demande;
+use App\Services\DemandeNotifier;
+use App\Services\FacturePdfService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,9 +15,15 @@ use Illuminate\Support\Facades\Log;
 
 class LiquidationController extends Controller
 {
+    public function __construct(
+        private DemandeNotifier $demandeNotifier,
+        private FacturePdfService $facturePdfService
+    ) {
+    }
+
     public function index()
     {
-        $demandes = Demande::where('statut', 'validee')
+        $demandes = Demande::where('statut', Demande::STATUT_APPROUVEE)
             ->whereDoesntHave('liquidation')
             ->with(['travailleur', 'entreprise'])
             ->latest()
@@ -35,20 +43,33 @@ class LiquidationController extends Controller
 
     public function store(StoreLiquidationRequest $request)
     {
+        $liquidation = null;
+
         try {
-            DB::transaction(function () use ($request) {
+            DB::transaction(function () use ($request, &$liquidation) {
                 $data = $request->validated();
                 $data['administrateur_id'] = Auth::guard('administrateur')->id();
 
                 $demande = Demande::where('id', $data['demande_id'])
-                    ->where('statut', 'validee')
+                    ->where('statut', Demande::STATUT_APPROUVEE)
                     ->whereDoesntHave('liquidation')
                     ->firstOrFail();
 
-                Liquidation::create($data);
+                $liquidation = Liquidation::create(array_merge($data, [
+                    'numero_facture' => $this->facturePdfService->genererNumeroFacture(),
+                ]));
 
-                $demande->update(['statut' => 'liquidee']);
+                $demande->changeStatut(
+                    Demande::STATUT_PAYEE,
+                    'administrateur',
+                    Auth::guard('administrateur')->id()
+                );
             });
+
+            if ($liquidation) {
+                $demande = Demande::with(['entreprise', 'travailleur'])->findOrFail($liquidation->demande_id);
+                $this->demandeNotifier->notifyLiquidee($demande, $liquidation);
+            }
 
             return redirect()->route('admin.liquidations.index')
                 ->with('success', 'Liquidation enregistrée avec succès.');
@@ -86,8 +107,12 @@ class LiquidationController extends Controller
                 $demande = $liquidation->demande;
                 $liquidation->delete();
 
-                if ($demande && $demande->statut === 'liquidee') {
-                    $demande->update(['statut' => 'validee']);
+                if ($demande && $demande->statut === Demande::STATUT_PAYEE) {
+                    $demande->changeStatut(
+                        Demande::STATUT_APPROUVEE,
+                        'administrateur',
+                        Auth::guard('administrateur')->id()
+                    );
                 }
             });
 

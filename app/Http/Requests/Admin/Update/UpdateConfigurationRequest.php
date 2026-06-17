@@ -15,9 +15,9 @@ class UpdateConfigurationRequest extends FormRequest
     {
         return [
             'taux_cotisation' => 'required|numeric|min:0|max:100',
-            'taux_allocation_familiale' => 'required|numeric|min:0|max:100',
-            'taux_allocation_maternite' => 'required|numeric|min:0|max:100',
-            'taux_allocation_prenatale' => 'required|numeric|min:0|max:100',
+            'montant_allocation_familiale' => 'required|numeric|min:1',
+            'montant_allocation_maternite' => 'required|numeric|min:1',
+            'montant_allocation_prenatale' => 'required|numeric|min:1',
         ];
     }
 
@@ -28,9 +28,12 @@ class UpdateConfigurationRequest extends FormRequest
             'taux_cotisation.numeric' => 'Le taux de cotisation doit être un nombre.',
             'taux_cotisation.min' => 'Le taux de cotisation ne peut pas être négatif.',
             'taux_cotisation.max' => 'Le taux de cotisation ne peut pas dépasser 100%.',
-            'taux_allocation_familiale.required' => 'Le taux d\'allocation familiale est requis.',
-            'taux_allocation_maternite.required' => 'Le taux d\'allocation maternité est requis.',
-            'taux_allocation_prenatale.required' => 'Le taux d\'allocation prénatale est requis.',
+            'montant_allocation_familiale.required' => 'Le montant familiale est requis.',
+            'montant_allocation_maternite.required' => 'Le montant maternité est requis.',
+            'montant_allocation_prenatale.required' => 'Le montant prénatale est requis.',
+            'montant_allocation_familiale.min' => 'Le montant familiale doit être supérieur à 0.',
+            'montant_allocation_maternite.min' => 'Le montant maternité doit être supérieur à 0.',
+            'montant_allocation_prenatale.min' => 'Le montant prénatale doit être supérieur à 0.',
         ];
     }
 }

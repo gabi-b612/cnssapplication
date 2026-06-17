@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Détails Administrateur - Administration CNSS')
-@section('page-title', 'Détails de l\'Administrateur')
+@section('title', 'Détails Gestionnaire RH - Gestionnaire RH CNSS')
+@section('page-title', 'Détails du Gestionnaire RH')
 
 @section('content')
 <div class="mb-6">
@@ -117,7 +117,7 @@
                 </a>
                 @if(auth('administrateur')->user()->id !== $administrateur->id)
                     <form action="{{ route('admin.administrateurs.destroy', $administrateur) }}" method="POST" 
-                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet administrateur ?');">
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce gestionnaire RH ?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">

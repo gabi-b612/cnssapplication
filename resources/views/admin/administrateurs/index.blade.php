@@ -1,20 +1,20 @@
 @extends('layouts.admin')
 
-@section('title', 'Administrateurs - Administration CNSS')
-@section('page-title', 'Gestion des Administrateurs')
+@section('title', 'Gestionnaires RH - Gestionnaire RH CNSS')
+@section('page-title', 'Gestion des Gestionnaires RH')
 
 @section('content')
 <div class="mb-6 flex items-center justify-end">
     <x-modal
         id="modal-admin"
-        title="Ajouter un Administrateur"
+        title="Ajouter un Gestionnaire RH"
         submit-text="Créer"
         form-id="modal-form-admin"
         :open-on-load="$errors->any()"
     >
         <x-slot:trigger>
             <button type="button" class="px-5 py-2.5 bg-my-green text-white rounded-lg hover:opacity-90 transition-opacity font-medium flex items-center gap-2 shadow-sm">
-                <i class="fas fa-plus"></i>Ajouter un administrateur
+                <i class="fas fa-plus"></i>Ajouter un gestionnaire RH
             </button>
         </x-slot:trigger>
 
@@ -54,7 +54,7 @@
                     <option value="">Sélectionnez une fonction</option>
                     <option value="Gestionnaire RH" @selected(old('fonction') === 'Gestionnaire RH')>Gestionnaire RH</option>
                     <option value="Auditeur" @selected(old('fonction') === 'Auditeur')>Auditeur</option>
-                    <option value="Super Administrateur" @selected(old('fonction') === 'Super Administrateur')>Super Administrateur</option>
+                    <option value="Super Administrateur" @selected(old('fonction') === 'Super Administrateur')>Super Gestionnaire RH</option>
                     <option value="Coordinateur" @selected(old('fonction') === 'Coordinateur')>Coordinateur</option>
                 </select>
                 @error('fonction')
@@ -128,7 +128,7 @@
                             </a>
                             <form method="POST" action="{{ route('admin.administrateurs.destroy', $admin) }}"
                                   class="inline"
-                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet administrateur ?');">
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce gestionnaire RH ?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:text-red-900 transition-colors" title="Supprimer">
@@ -142,7 +142,7 @@
                         <td colspan="5" class="px-6 py-12 text-center">
                             <div class="flex flex-col items-center justify-center gap-3">
                                 <i class="fas fa-users text-gray-300 text-3xl"></i>
-                                <p class="text-gray-500 font-medium">Aucun administrateur enregistré</p>
+                                <p class="text-gray-500 font-medium">Aucun gestionnaire RH enregistré</p>
                             </div>
                         </td>
                     </tr>
