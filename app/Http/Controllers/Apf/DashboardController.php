@@ -10,9 +10,9 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'en_attente' => Demande::where('statut', 'en_attente')->count(),
-            'validees' => Demande::where('statut', 'validee')->count(),
-            'rejetees' => Demande::where('statut', 'rejetee')->count(),
+            'en_attente' => Demande::whereIn('statut', [Demande::STATUT_SOUMISE, Demande::STATUT_EN_VERIFICATION])->count(),
+            'approuvees' => Demande::where('statut', Demande::STATUT_APPROUVEE)->count(),
+            'rejetees' => Demande::where('statut', Demande::STATUT_REJETEE)->count(),
         ];
 
         return view('apf.dashboard', compact('stats'));

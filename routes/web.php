@@ -20,6 +20,7 @@ use App\Http\Controllers\Apf\DashboardController as ApfDashboardController;
 use App\Http\Controllers\Apf\DemandeController as ApfDemandeController;
 use App\Http\Controllers\Travailleur\TravailleurAuthController;
 use App\Http\Controllers\Travailleur\DashboardController as TravailleurDashboardController;
+use App\Http\Controllers\Travailleur\DemandeController as TravailleurDemandeController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -89,6 +90,7 @@ Route::prefix('entreprise')->name('entreprise.')->group(function () {
         Route::get('/demandes', [EntrepriseDemandeController::class, 'index'])->name('demandes.index');
         Route::get('/demandes/create', [EntrepriseDemandeController::class, 'create'])->name('demandes.create');
         Route::post('/demandes', [EntrepriseDemandeController::class, 'store'])->name('demandes.store');
+        Route::get('/demandes/{demande}', [EntrepriseDemandeController::class, 'show'])->name('demandes.show');
     });
 });
 
@@ -117,6 +119,7 @@ Route::prefix('travailleur')->name('travailleur.')->group(function () {
 
     Route::middleware('auth:travailleur')->group(function () {
         Route::get('/dashboard', [TravailleurDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/demandes/{demande}', [TravailleurDemandeController::class, 'show'])->name('demandes.show');
         Route::post('/logout', [TravailleurAuthController::class, 'logout'])->name('logout');
     });
 });

@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Apf;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Apf\Validation\ValiderDemandeRequest;
 use App\Models\Demande;
+use Illuminate\Support\Facades\DB;
 
 class DemandeController extends Controller
 {
     public function index()
     {
         $demandes = Demande::with(['travailleur', 'entreprise'])
-            ->where('statut', 'en_attente')
+            ->whereIn('statut', [Demande::STATUT_SOUMISE, Demande::STATUT_EN_VERIFICATION])
             ->latest()
             ->paginate(10);
 
@@ -21,17 +22,34 @@ class DemandeController extends Controller
     public function valider(ValiderDemandeRequest $request, $id)
     {
         $demande = Demande::where('id', $id)
-            ->where('statut', 'en_attente')
+            ->whereIn('statut', [Demande::STATUT_SOUMISE, Demande::STATUT_EN_VERIFICATION])
             ->firstOrFail();
 
         try {
-            $demande->update([
-                'statut' => $request->validated('statut'),
-                'apf_id' => auth('apf')->id(),
-            ]);
+            DB::transaction(function () use ($request, $demande) {
+                $apfId = auth('apf')->id();
 
-            $message = $request->validated('statut') === 'validee'
-                ? 'Demande validée avec succès.'
+                if ($demande->statut === Demande::STATUT_SOUMISE) {
+                    $demande->changeStatut(Demande::STATUT_EN_VERIFICATION, 'apf', $apfId);
+                    $demande->update(['apf_id' => $apfId]);
+                }
+
+                $nouveauStatut = $request->validated('statut');
+
+                $demande->changeStatut(
+                    $nouveauStatut,
+                    'apf',
+                    $apfId,
+                    $request->validated('motif_rejet')
+                );
+
+                if (!$demande->apf_id) {
+                    $demande->update(['apf_id' => $apfId]);
+                }
+            });
+
+            $message = $request->validated('statut') === Demande::STATUT_APPROUVEE
+                ? 'Demande approuvée avec succès.'
                 : 'Demande rejetée avec succès.';
 
             return redirect()->route('apf.demandes.index')

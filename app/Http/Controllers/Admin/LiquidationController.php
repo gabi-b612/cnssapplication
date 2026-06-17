@@ -15,7 +15,7 @@ class LiquidationController extends Controller
 {
     public function index()
     {
-        $demandes = Demande::where('statut', 'validee')
+        $demandes = Demande::where('statut', Demande::STATUT_APPROUVEE)
             ->whereDoesntHave('liquidation')
             ->with(['travailleur', 'entreprise'])
             ->latest()
@@ -41,13 +41,17 @@ class LiquidationController extends Controller
                 $data['administrateur_id'] = Auth::guard('administrateur')->id();
 
                 $demande = Demande::where('id', $data['demande_id'])
-                    ->where('statut', 'validee')
+                    ->where('statut', Demande::STATUT_APPROUVEE)
                     ->whereDoesntHave('liquidation')
                     ->firstOrFail();
 
                 Liquidation::create($data);
 
-                $demande->update(['statut' => 'liquidee']);
+                $demande->changeStatut(
+                    Demande::STATUT_PAYEE,
+                    'administrateur',
+                    Auth::guard('administrateur')->id()
+                );
             });
 
             return redirect()->route('admin.liquidations.index')
@@ -86,8 +90,12 @@ class LiquidationController extends Controller
                 $demande = $liquidation->demande;
                 $liquidation->delete();
 
-                if ($demande && $demande->statut === 'liquidee') {
-                    $demande->update(['statut' => 'validee']);
+                if ($demande && $demande->statut === Demande::STATUT_PAYEE) {
+                    $demande->changeStatut(
+                        Demande::STATUT_APPROUVEE,
+                        'administrateur',
+                        Auth::guard('administrateur')->id()
+                    );
                 }
             });
 

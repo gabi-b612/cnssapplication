@@ -35,10 +35,7 @@
                 <div>
                     <p class="text-xs text-gray-600 uppercase tracking-wide font-medium">Statut Demande</p>
                     <p class="mt-1">
-                        @php $statutDemande = $liquidation->demande->statut; @endphp
-                        <span class="inline-block px-3 py-1 rounded-full text-xs font-medium {{ $statutDemande === 'liquidee' ? 'bg-my-green/10 text-my-green' : 'bg-green-100 text-green-700' }}">
-                            <i class="fas fa-check-circle mr-1"></i>{{ ucfirst(str_replace('_', ' ', $statutDemande)) }}
-                        </span>
+                        <x-demande-statut-badge :statut="$liquidation->demande->statut" />
                     </p>
                 </div>
             </div>

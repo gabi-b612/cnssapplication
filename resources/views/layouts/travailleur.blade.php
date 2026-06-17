@@ -24,7 +24,7 @@
                 </a>
 
                 <a href="{{ route('travailleur.dashboard') }}#mes-demandes"
-                   class="flex items-center px-4 py-3 rounded-lg transition-colors text-sm font-medium text-white hover:bg-white/10">
+                   class="flex items-center px-4 py-3 rounded-lg transition-colors text-sm font-medium {{ request()->routeIs('travailleur.demandes.show') ? 'bg-my-green text-black-blue' : 'text-white hover:bg-white/10' }}">
                     <i class="fas fa-file-contract w-5 mr-3"></i>Mes Demandes
                 </a>
             </nav>

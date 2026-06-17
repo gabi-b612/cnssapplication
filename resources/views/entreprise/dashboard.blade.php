@@ -23,8 +23,8 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 border-l-4 border-yellow-500">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-600 text-sm font-medium">En attente</p>
-                <p class="text-3xl font-bold text-black-blue mt-2">{{ $stats['demandes_en_attente'] }}</p>
+                <p class="text-gray-600 text-sm font-medium">En cours</p>
+                <p class="text-3xl font-bold text-black-blue mt-2">{{ $stats['demandes_en_cours'] }}</p>
             </div>
             <div class="bg-yellow-500/10 p-4 rounded-lg">
                 <i class="fas fa-clock text-yellow-500 text-2xl"></i>
@@ -35,8 +35,8 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 border-l-4 border-my-green">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-600 text-sm font-medium">Validées</p>
-                <p class="text-3xl font-bold text-black-blue mt-2">{{ $stats['demandes_validees'] }}</p>
+                <p class="text-gray-600 text-sm font-medium">Approuvées / Payées</p>
+                <p class="text-3xl font-bold text-black-blue mt-2">{{ $stats['demandes_approuvees'] }}</p>
             </div>
             <div class="bg-my-green/10 p-4 rounded-lg">
                 <i class="fas fa-check-circle text-my-green text-2xl"></i>

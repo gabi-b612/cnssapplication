@@ -18,7 +18,7 @@ class DashboardController extends Controller
             'entreprises' => Entreprise::count(),
             'administrateurs' => Administrateur::count(),
             'demandes' => Demande::count(),
-            'demandes_validees' => Demande::where('statut', 'validee')->count(),
+            'demandes_approuvees' => Demande::whereIn('statut', [Demande::STATUT_APPROUVEE, Demande::STATUT_PAYEE])->count(),
             'liquidations' => Liquidation::count(),
             'travailleurs' => Travailleur::count(),
             'apfs' => Apf::count(),

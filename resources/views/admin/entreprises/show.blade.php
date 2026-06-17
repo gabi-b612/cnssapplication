@@ -95,9 +95,7 @@
                                 <p class="text-sm text-gray-600">{{ $demande->travailleur?->prenom }} {{ $demande->travailleur?->nom }}</p>
                                 <p class="text-xs text-gray-500 mt-1">Type: <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $demande->type_allocation)) }}</span></p>
                             </div>
-                            <span class="inline-block px-3 py-1 rounded-full text-xs font-medium {{ $demande->statut === 'validee' || $demande->statut === 'liquidee' ? 'bg-green-100 text-green-700' : ($demande->statut === 'rejetee' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700') }}">
-                                {{ ucfirst(str_replace('_', ' ', $demande->statut)) }}
-                            </span>
+                            <x-demande-statut-badge :statut="$demande->statut" />
                         </div>
                     @empty
                         <div class="p-4 bg-gray-50 rounded-lg text-center">
@@ -124,8 +122,8 @@
                     <span class="text-2xl font-bold text-blue-600">{{ $demandes->count() }}</span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span class="text-gray-600">Validées</span>
-                    <span class="text-2xl font-bold text-green-600">{{ $demandes->where('statut', 'validee')->count() }}</span>
+                    <span class="text-gray-600">Approuvées / Payées</span>
+                    <span class="text-2xl font-bold text-green-600">{{ $demandes->whereIn('statut', ['approuvee', 'payee'])->count() }}</span>
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-600">Rejetées</span>

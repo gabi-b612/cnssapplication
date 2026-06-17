@@ -143,6 +143,13 @@
                     <p><span class="font-medium text-black-blue">Entreprise :</span> <span x-text="entreprise"></span></p>
                     <p><span class="font-medium text-black-blue">Type :</span> <span x-text="typeAllocation"></span></p>
                     <p class="text-xs text-gray-500 pt-2">Choisissez une action pour cette demande :</p>
+
+                    <div>
+                        <label for="motif_rejet" class="block text-xs font-medium text-gray-700 mb-1">Motif du rejet (obligatoire si rejet)</label>
+                        <textarea id="motif_rejet" name="motif_rejet" rows="3" form="form-traiter-demande"
+                                  class="w-full rounded-lg border-gray-300 text-sm focus:border-my-green focus:ring-my-green"
+                                  placeholder="Indiquez le motif en cas de rejet..."></textarea>
+                    </div>
                 </div>
 
                 <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex gap-3">
@@ -151,21 +158,15 @@
                         Annuler
                     </button>
 
-                    <form :action="`{{ url('apf/demandes') }}/${demandeId}/valider`" method="POST" class="flex-1">
+                    <form id="form-traiter-demande" :action="`{{ url('apf/demandes') }}/${demandeId}/valider`" method="POST" class="flex-[2] flex gap-3">
                         @csrf
-                        <input type="hidden" name="statut" value="rejetee">
-                        <button type="submit"
-                                class="w-full px-4 py-2.5 bg-red-500 text-white rounded-lg hover:opacity-90 transition-opacity font-medium">
+                        <button type="submit" name="statut" value="rejetee"
+                                class="flex-1 px-4 py-2.5 bg-red-500 text-white rounded-lg hover:opacity-90 transition-opacity font-medium">
                             <i class="fas fa-times-circle mr-1"></i>Rejeter
                         </button>
-                    </form>
-
-                    <form :action="`{{ url('apf/demandes') }}/${demandeId}/valider`" method="POST" class="flex-1">
-                        @csrf
-                        <input type="hidden" name="statut" value="validee">
-                        <button type="submit"
-                                class="w-full px-4 py-2.5 bg-my-green text-white rounded-lg hover:opacity-90 transition-opacity font-medium">
-                            <i class="fas fa-check-circle mr-1"></i>Valider
+                        <button type="submit" name="statut" value="approuvee"
+                                class="flex-1 px-4 py-2.5 bg-my-green text-white rounded-lg hover:opacity-90 transition-opacity font-medium">
+                            <i class="fas fa-check-circle mr-1"></i>Approuver
                         </button>
                     </form>
                 </div>

@@ -36,19 +36,11 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @if($demande->statut === 'liquidee')
-                                <span class="inline-block px-3 py-1 bg-my-green/10 text-my-green rounded-full text-xs font-medium">
-                                    <i class="fas fa-check-circle mr-1"></i>Liquidée
-                                </span>
-                            @else
-                                <span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
-                                    <i class="fas fa-check mr-1"></i>Validée
-                                </span>
-                            @endif
+                            <x-demande-statut-badge :statut="$demande->statut" />
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             @if($demande->liquidation)
-                                <span class="font-bold text-my-green">${{ number_format($demande->liquidation->montant, 2, '.', ',') }}</span>
+                                <span class="font-bold text-my-green">{{ number_format($demande->liquidation->montant, 0, ',', ' ') }} FC</span>
                             @else
                                 <span class="text-gray-400">—</span>
                             @endif
