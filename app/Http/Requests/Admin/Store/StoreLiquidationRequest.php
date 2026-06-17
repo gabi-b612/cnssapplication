@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Admin\Store;
 
+use App\Models\Demande;
+use App\Services\AllocationCalculator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreLiquidationRequest extends FormRequest
@@ -17,7 +19,28 @@ class StoreLiquidationRequest extends FormRequest
             'demande_id' => 'required|exists:demandes,id|unique:liquidations,demande_id',
             'montant' => 'required|numeric|gt:0',
             'date_liquidation' => 'required|date|before_or_equal:today',
+            'justification_ajustement' => 'nullable|string|max:1000',
         ];
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $demande = Demande::find($this->input('demande_id'));
+
+            if (!$demande || !$this->filled('montant')) {
+                return;
+            }
+
+            $montantSuggere = app(AllocationCalculator::class)->montantPourType($demande->type_allocation);
+
+            if ((float) $this->input('montant') !== (float) $montantSuggere && !$this->filled('justification_ajustement')) {
+                $validator->errors()->add(
+                    'justification_ajustement',
+                    'Une justification est obligatoire lorsque le montant diffère du montant de référence.'
+                );
+            }
+        });
     }
 
     public function messages(): array

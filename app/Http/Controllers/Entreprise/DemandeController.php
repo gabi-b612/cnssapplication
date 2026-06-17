@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Entreprise\Store\StoreDemandeRequest;
 use App\Models\Demande;
 use App\Models\Travailleur;
+use App\Services\AllocationCalculator;
 use Illuminate\Support\Facades\DB;
 
 class DemandeController extends Controller
@@ -41,7 +42,9 @@ class DemandeController extends Controller
             ->orderBy('nom')
             ->get();
 
-        return view('entreprise.demandes.create', compact('travailleurs'));
+        $montants = app(AllocationCalculator::class)->montantsParType();
+
+        return view('entreprise.demandes.create', compact('travailleurs', 'montants'));
     }
 
     public function store(StoreDemandeRequest $request)

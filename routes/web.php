@@ -15,6 +15,7 @@ use App\Http\Controllers\Entreprise\EntrepriseAuthController;
 use App\Http\Controllers\Entreprise\DashboardController as EntrepriseDashboardController;
 use App\Http\Controllers\Entreprise\TravailleurController as EntrepriseTravailleurController;
 use App\Http\Controllers\Entreprise\DemandeController as EntrepriseDemandeController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Apf\ApfAuthController;
 use App\Http\Controllers\Apf\DashboardController as ApfDashboardController;
 use App\Http\Controllers\Apf\DemandeController as ApfDemandeController;
@@ -22,9 +23,7 @@ use App\Http\Controllers\Travailleur\TravailleurAuthController;
 use App\Http\Controllers\Travailleur\DashboardController as TravailleurDashboardController;
 use App\Http\Controllers\Travailleur\DemandeController as TravailleurDemandeController;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/test-create-admin', function () {
     $admin = Administrateur::create([

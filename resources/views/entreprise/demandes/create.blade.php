@@ -20,7 +20,8 @@
             </a>
         </div>
     @else
-        <form action="{{ route('entreprise.demandes.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('entreprise.demandes.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6"
+              x-data="{ type: '{{ old('type_allocation') }}', montants: @js($montants) }">
             @csrf
 
             <div>
@@ -41,7 +42,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Type d'allocation *</label>
-                <select name="type_allocation" required
+                <select name="type_allocation" required x-model="type"
                         class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-green/50 focus:border-my-green {{ $errors->has('type_allocation') ? 'border-red-500' : '' }}">
                     <option value="">Sélectionnez le type</option>
                     <option value="familiale" @selected(old('type_allocation') === 'familiale')>Allocation familiale</option>
@@ -51,6 +52,11 @@
                 @error('type_allocation')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
+
+                <div x-show="type" x-cloak class="mt-3 p-4 bg-my-green/5 border border-my-green/20 rounded-lg">
+                    <p class="text-xs text-gray-600 uppercase tracking-wide font-medium">Montant de référence</p>
+                    <p class="text-my-green font-bold text-lg mt-1" x-text="montants[type] ? new Intl.NumberFormat('fr-FR').format(montants[type]) + ' FC' : ''"></p>
+                </div>
             </div>
 
             <div>

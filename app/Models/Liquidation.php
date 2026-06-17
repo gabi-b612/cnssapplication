@@ -14,6 +14,7 @@ class Liquidation extends Model
         'administrateur_id',
         'montant',
         'date_liquidation',
+        'justification_ajustement',
     ];
 
     protected $casts = [
@@ -23,7 +24,6 @@ class Liquidation extends Model
         'updated_at' => 'datetime',
     ];
 
-    // Relations
     public function demande()
     {
         return $this->belongsTo(Demande::class);

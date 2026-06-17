@@ -12,12 +12,14 @@
         travailleur: '',
         entreprise: '',
         typeAllocation: '',
+        montantReference: '',
         openModal(demande) {
             this.demandeId = demande.id;
             this.demandeRef = '#' + demande.id;
             this.travailleur = demande.travailleur;
             this.entreprise = demande.entreprise;
             this.typeAllocation = demande.type;
+            this.montantReference = demande.montant;
             this.open = true;
         }
     }"
@@ -39,6 +41,9 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse($demandes as $demande)
+                        @php
+                            $montantReference = app(\App\Services\AllocationCalculator::class)->montantPourType($demande->type_allocation);
+                        @endphp
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-black-blue">
                                 #{{ $demande->id }}
@@ -77,6 +82,7 @@
                                         'travailleur' => $demande->travailleur->nom . ' ' . $demande->travailleur->postnom . ' ' . $demande->travailleur->prenom,
                                         'entreprise' => $demande->entreprise->raison_sociale,
                                         'type' => ucfirst($demande->type_allocation),
+                                        'montant' => \App\Services\AllocationCalculator::formaterMontant($montantReference),
                                     ]))"
                                     class="px-4 py-2 bg-my-green text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium"
                                 >
@@ -142,6 +148,7 @@
                     <p><span class="font-medium text-black-blue">Travailleur :</span> <span x-text="travailleur"></span></p>
                     <p><span class="font-medium text-black-blue">Entreprise :</span> <span x-text="entreprise"></span></p>
                     <p><span class="font-medium text-black-blue">Type :</span> <span x-text="typeAllocation"></span></p>
+                    <p><span class="font-medium text-black-blue">Montant de référence :</span> <span class="text-my-green font-semibold" x-text="montantReference"></span></p>
                     <p class="text-xs text-gray-500 pt-2">Choisissez une action pour cette demande :</p>
 
                     <div>

@@ -1,5 +1,9 @@
 @props(['demande', 'showTravailleur' => true, 'showEntreprise' => false])
 
+@php
+    $montantReference = app(\App\Services\AllocationCalculator::class)->montantPourType($demande->type_allocation);
+@endphp
+
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div class="lg:col-span-2 space-y-6">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -16,6 +20,20 @@
                     <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Type d'allocation</p>
                     <p class="text-black-blue font-medium mt-1">{{ ucfirst(str_replace('_', ' ', $demande->type_allocation)) }}</p>
                 </div>
+
+                @if($demande->statut !== \App\Models\Demande::STATUT_REJETEE)
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                            {{ $demande->statut === \App\Models\Demande::STATUT_PAYEE ? 'Montant versé' : 'Montant de référence' }}
+                        </p>
+                        @if($demande->statut === \App\Models\Demande::STATUT_PAYEE && $demande->liquidation)
+                            <p class="text-my-green font-bold text-lg mt-1">{{ \App\Services\AllocationCalculator::formaterMontant($demande->liquidation->montant) }}</p>
+                            <p class="text-xs text-gray-500 mt-1">Liquidée le {{ $demande->liquidation->date_liquidation->format('d/m/Y') }}</p>
+                        @else
+                            <p class="text-my-green font-bold text-lg mt-1">{{ \App\Services\AllocationCalculator::formaterMontant($montantReference) }}</p>
+                        @endif
+                    </div>
+                @endif
                 <div>
                     <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Date de soumission</p>
                     <p class="text-black-blue font-medium mt-1">{{ $demande->created_at->format('d/m/Y à H:i') }}</p>
@@ -24,14 +42,6 @@
                     <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Dernière mise à jour</p>
                     <p class="text-black-blue font-medium mt-1">{{ $demande->updated_at->format('d/m/Y à H:i') }}</p>
                 </div>
-
-                @if($demande->statut === \App\Models\Demande::STATUT_PAYEE && $demande->liquidation)
-                    <div>
-                        <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Montant versé</p>
-                        <p class="text-my-green font-bold text-lg mt-1">{{ number_format($demande->liquidation->montant, 0, ',', ' ') }} FC</p>
-                        <p class="text-xs text-gray-500 mt-1">Liquidée le {{ $demande->liquidation->date_liquidation->format('d/m/Y') }}</p>
-                    </div>
-                @endif
 
                 @if($demande->apf)
                     <div>

@@ -76,10 +76,17 @@
             <div class="p-6 bg-gradient-to-r from-my-green/10 to-my-green/5 rounded-lg border border-my-green/20">
                 <div class="text-center">
                     <p class="text-gray-600 text-sm mb-2">Montant</p>
-                    <p class="text-5xl font-bold text-my-green">{{ number_format($liquidation->montant, 2, ',', ' ') }} FC</p>
-                    <p class="text-xs text-gray-500 mt-4">CDF — Franc congolais</p>
+                    <p class="text-5xl font-bold text-my-green">{{ \App\Services\AllocationCalculator::formaterMontant($liquidation->montant) }}</p>
+                    <p class="text-xs text-gray-500 mt-4">Franc congolais (FC)</p>
                 </div>
             </div>
+
+            @if($liquidation->justification_ajustement)
+                <div class="mt-4 p-4 bg-yellow-50 border border-yellow-100 rounded-lg">
+                    <p class="text-xs text-yellow-800 uppercase tracking-wide font-medium mb-1">Justification de l'ajustement</p>
+                    <p class="text-sm text-yellow-900">{{ $liquidation->justification_ajustement }}</p>
+                </div>
+            @endif
         </div>
 
         <!-- Section Dates -->
@@ -138,7 +145,7 @@
                 </div>
                 <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
                     <span class="text-gray-600">Montant</span>
-                    <span class="font-bold text-my-green">{{ number_format($liquidation->montant, 2, ',', ' ') }} FC</span>
+                    <span class="font-bold text-my-green">{{ \App\Services\AllocationCalculator::formaterMontant($liquidation->montant) }}</span>
                 </div>
                 <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
                     <span class="text-gray-600">Type</span>
