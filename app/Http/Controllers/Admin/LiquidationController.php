@@ -68,11 +68,17 @@ class LiquidationController extends Controller
 
             if ($liquidation) {
                 $demande = Demande::with(['entreprise', 'travailleur'])->findOrFail($liquidation->demande_id);
-                $this->demandeNotifier->notifyLiquidee($demande, $liquidation);
+                $emailSent = $this->demandeNotifier->notifyLiquidee($demande, $liquidation);
             }
 
-            return redirect()->route('admin.liquidations.index')
+            $redirect = redirect()->route('admin.liquidations.index')
                 ->with('success', 'Liquidation enregistrée avec succès.');
+
+            if (isset($emailSent) && !$emailSent) {
+                $redirect->with('error', 'Liquidation enregistrée, mais l\'envoi des emails a échoué. Vérifiez la configuration SMTP dans .env.');
+            }
+
+            return $redirect;
         } catch (ModelNotFoundException $e) {
             return redirect()->route('admin.liquidations.index')
                 ->with('error', 'Cette demande n\'est plus disponible pour liquidation.')

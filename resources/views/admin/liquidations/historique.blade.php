@@ -48,6 +48,9 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="{{ route('factures.download', $liquidation) }}" class="text-my-green hover:text-black-blue transition-colors mr-3" title="Télécharger la facture">
+                                <i class="fas fa-file-invoice"></i>
+                            </a>
                             <a href="{{ route('admin.liquidations.show', $liquidation) }}" class="text-my-green hover:text-black-blue transition-colors mr-3" title="Voir les détails">
                                 <i class="fas fa-eye"></i>
                             </a>

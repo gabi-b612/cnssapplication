@@ -135,6 +135,12 @@
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-sm font-bold text-black-blue uppercase tracking-wide mb-4">Récapitulatif</h3>
             <div class="space-y-4 text-sm">
+                @if($liquidation->numero_facture)
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                        <span class="text-gray-600">N° Facture</span>
+                        <span class="font-medium text-black-blue">{{ $liquidation->numero_facture }}</span>
+                    </div>
+                @endif
                 <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
                     <span class="text-gray-600">ID Liquidation</span>
                     <span class="font-medium text-black-blue">#{{ $liquidation->id }}</span>
@@ -152,6 +158,11 @@
                     <span class="font-medium text-black-blue">{{ ucfirst(str_replace('_', ' ', $liquidation->demande->type_allocation)) }}</span>
                 </div>
             </div>
+
+            <a href="{{ route('factures.download', $liquidation) }}"
+               class="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-my-green text-white rounded-lg hover:opacity-90 transition-opacity font-medium text-sm">
+                <i class="fas fa-file-invoice"></i>Télécharger la facture PDF
+            </a>
         </div>
     </div>
 </div>
