@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Store\StoreLiquidationRequest;
 use App\Models\Liquidation;
 use App\Models\Demande;
+use App\Services\AllocationCalculator;
 use App\Services\DemandeNotifier;
 use App\Services\FacturePdfService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -29,7 +30,9 @@ class LiquidationController extends Controller
             ->latest()
             ->get();
 
-        return view('admin.liquidations.index', compact('demandes'));
+        $montants = app(AllocationCalculator::class)->montantsParType();
+
+        return view('admin.liquidations.index', compact('demandes', 'montants'));
     }
 
     public function historique()

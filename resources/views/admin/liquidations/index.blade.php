@@ -26,7 +26,7 @@
             <tbody class="divide-y divide-gray-200">
                 @forelse($demandes as $demande)
                     @php
-                        $montantSuggere = app(\App\Services\AllocationCalculator::class)->montantPourType($demande->type_allocation);
+                        $montantSuggere = $montants[$demande->type_allocation] ?? 0;
                     @endphp
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap">

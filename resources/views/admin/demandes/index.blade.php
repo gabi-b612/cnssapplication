@@ -40,7 +40,13 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             @if($demande->liquidation)
-                                <span class="font-bold text-my-green">{{ number_format($demande->liquidation->montant, 0, ',', ' ') }} FC</span>
+                                <span class="font-bold text-my-green">{{ \App\Services\AllocationCalculator::formaterMontant($demande->liquidation->montant) }}</span>
+                            @elseif($demande->statut === \App\Models\Demande::STATUT_APPROUVEE)
+                                @php
+                                    $montantReference = $montants[$demande->type_allocation] ?? 0;
+                                @endphp
+                                <span class="font-medium text-gray-700">{{ \App\Services\AllocationCalculator::formaterMontant($montantReference) }}</span>
+                                <span class="block text-xs text-gray-400">Montant de référence</span>
                             @else
                                 <span class="text-gray-400">—</span>
                             @endif
