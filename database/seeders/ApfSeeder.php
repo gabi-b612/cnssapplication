@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class ApfSeeder extends Seeder
 {
-    public const DEFAULT_PASSWORD = 'Admin@123';
+    public const string DEFAULT_PASSWORD = 'Admin@123';
 
     public function run(): void
     {

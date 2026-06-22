@@ -31,8 +31,10 @@ class RapportController extends Controller
             'payees' => (clone $demandesQuery)->where('statut', Demande::STATUT_PAYEE)->count(),
         ];
 
-        $stats['montant_liquide'] = Liquidation::whereBetween('date_liquidation', [$dateDebut, $dateFin])
-            ->sum('montant');
+        $stats['montant_liquide'] = Liquidation::whereBetween('date_liquidation', [
+            $dateDebut . ' 00:00:00',
+            $dateFin . ' 23:59:59',
+        ])->sum('montant');
 
         $stats['taux_approbation'] = $stats['total'] > 0
             ? round((($stats['approuvees'] + $stats['payees']) / $stats['total']) * 100, 1)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Demande;
+use App\Services\AllocationCalculator;
 
 class DemandeController extends Controller
 {
@@ -14,6 +15,8 @@ class DemandeController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('admin.demandes.index', compact('demandes'));
+        $montants = app(AllocationCalculator::class)->montantsParType();
+
+        return view('admin.demandes.index', compact('demandes', 'montants'));
     }
 }
